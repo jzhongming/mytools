@@ -73,10 +73,8 @@ public class MathUtil {
 		System.out.println(MathUtil.isEven(-432422));
 		System.out.println(MathUtil.isOdd(-432412));
 		char tt[] = { 'a', 'b', 'c', 'd', 'e' };
+		System.out.println(tt);
 		revertArray(tt);
 		System.out.println(tt);
-		for (int i = 0; i < tt.length; i++) {
-			System.out.println(tt[i]);
-		}
 	}
 }
