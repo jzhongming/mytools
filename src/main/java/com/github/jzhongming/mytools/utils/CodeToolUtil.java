@@ -10,9 +10,8 @@ import java.util.regex.Pattern;
  */
 public class CodeToolUtil {
 
-	private static final char c[] = { '<', '>', '&', '\"' };
-	private static final String expansion[] = { "&lt;", "&gt;", "&amp;",
-			"&quot;" };
+	private static final char[] c = { '<', '>', '&', '\"' };
+	private static final String[] expansion = { "&lt;", "&gt;", "&amp;", "&quot;" };
 
 	private CodeToolUtil() {
 
@@ -69,8 +68,7 @@ public class CodeToolUtil {
 		Matcher m = p.matcher(szStr);
 		StringBuffer buf = new StringBuffer();
 		while (m.find()) {
-			m.appendReplacement(buf, "&#" + (int) m.group(0).toCharArray()[0]
-					+ ";");
+			m.appendReplacement(buf, "&#" + (int) m.group(0).toCharArray()[0] + ";");
 		}
 		m.appendTail(buf);
 		return buf.toString();
@@ -147,8 +145,7 @@ public class CodeToolUtil {
 		Matcher m = p.matcher(szStr);
 		StringBuffer buf = new StringBuffer();
 		while (m.find()) {
-			m.appendReplacement(buf,
-					"" + (char) Integer.parseInt(m.group(1), 16));
+			m.appendReplacement(buf, "" + (char) Integer.parseInt(m.group(1), 16));
 		}
 		m.appendTail(buf);
 		return buf.toString();

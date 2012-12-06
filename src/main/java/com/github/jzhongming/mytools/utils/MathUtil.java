@@ -35,14 +35,10 @@ public class MathUtil {
 		if (array == null) {
 			return new int[0];
 		}
-		int i = 0;
-		int j = array.length - 1;
-		while (j > i) {
+		for (int i=0, j=array.length-1; j > i;++i,--j) {
 			array[i] ^= array[j];
 			array[j] ^= array[i];
 			array[i] ^= array[j];
-			j--;
-			i++;
 		}
 		return array;
 	}
@@ -57,14 +53,10 @@ public class MathUtil {
 		if (array == null) {
 			return new char[0];
 		}
-		int i = 0;
-		int j = array.length - 1;
-		while (j > i) {
+		for (int i=0, j=array.length-1; j > i;++i,--j) {
 			array[i] ^= array[j];
 			array[j] ^= array[i];
 			array[i] ^= array[j];
-			j--;
-			i++;
 		}
 		return array;
 	}
