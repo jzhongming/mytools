@@ -15,6 +15,7 @@ public final class SystemUtil {
 
 	public static final String OS_NAME = System.getProperty("os.name");
 	public static final String JAVA_VERSION = System.getProperty("java.version");
+	public static final String JAVA_VENDOR = System.getProperty("java.vendor");
 
 	static {
 		if (OS_NAME != null && OS_NAME.toLowerCase().indexOf("linux") >= 0) {
@@ -61,6 +62,7 @@ public final class SystemUtil {
 
 	public static void main(final String[] args) throws IOException {
 		System.out.println("OS NAME: " + OS_NAME);
+		System.out.println("JAVA VENDOR: " + JAVA_VENDOR);
 		System.out.println("JAVA VERSION: " + JAVA_VERSION);
 		System.out.println("Is 64Version: " + isAfterJava6u4Version());
 		System.out.println("Is LinuxPlatform: " + isLinuxPlatform());

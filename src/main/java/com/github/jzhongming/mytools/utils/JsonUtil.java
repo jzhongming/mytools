@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.util.ISO8601DateFormat;
 import org.codehaus.jettison.json.JSONObject;
 
 /**
@@ -54,8 +55,8 @@ public class JsonUtil {
 		String jsonStr;
 		try {
 			if (StringUtil.isNotEmpty(dateFormat)) {
-				DateFormat sd = new SimpleDateFormat(dateFormat);
-				mapper.getSerializationConfig().withDateFormat(sd);
+				DateFormat df = new SimpleDateFormat(dateFormat);
+				mapper.getSerializationConfig().withDateFormat(df);  
 			}
 
 			jsonStr = mapper.writeValueAsString(bean);
@@ -103,7 +104,6 @@ public class JsonUtil {
 	 *            自定义字段
 	 * @return
 	 */
-	@Deprecated
 	public static String beanToJson(Object bean, String[] fieldName) {
 		JSONObject jo = new JSONObject();
 		bean2Json(jo, bean, fieldName, "");
@@ -120,7 +120,6 @@ public class JsonUtil {
 	 *            时间字段格式
 	 * @return
 	 */
-	@Deprecated
 	public static String beanToJson(Object bean, String[] fieldName,
 			final String dateFormat) {
 		JSONObject jo = new JSONObject();
@@ -189,7 +188,8 @@ public class JsonUtil {
 		try {
 			if (StringUtil.isNotEmpty(dateFormat)) {
 				DateFormat df = new SimpleDateFormat(dateFormat);
-				mapper.getDeserializationConfig().withDateFormat(df);
+				mapper.getDeserializationConfig().setDateFormat(df);
+//				mapper.getDeserializationConfig().withDateFormat(df);
 			}
 
 			bean = mapper.readValue(jsonStr, clazz);
@@ -213,11 +213,13 @@ public class JsonUtil {
 	public static <T> T jsonToBean(URL url, Class<T> clazz,
 			final String dateFormat) {
 		ObjectMapper mapper = new ObjectMapper();
+		
 		T bean = null;
 		try {
 			if (StringUtil.isNotEmpty(dateFormat)) {
 				DateFormat df = new SimpleDateFormat(dateFormat);
-				mapper.getDeserializationConfig().withDateFormat(df);
+				mapper.getDeserializationConfig().setDateFormat(df);
+//				mapper.getDeserializationConfig().withDateFormat(df);
 			}
 
 			bean = mapper.readValue(url, clazz);

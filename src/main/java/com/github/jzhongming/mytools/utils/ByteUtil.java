@@ -91,7 +91,7 @@ public class ByteUtil {
 	}
 	
 	public static final long bytesToLongLittleEndian(final byte[] buf, final int offset) {
-		return ((long) buf[0 + offset] &			0x00000000000000ffL)
+		return ((long) buf[0 + offset] &            0x00000000000000ffL)
 				| (((long) buf[1 + offset] << 8 ) & 0x000000000000ff00L)
 				| (((long) buf[2 + offset] << 16) & 0x0000000000ff0000L)
 				| (((long) buf[3 + offset] << 24) & 0x00000000ff000000L)
@@ -159,6 +159,4 @@ public class ByteUtil {
 		return buf;
 	}
 	
-	public static void main(String[] args) {
-	}
 }

@@ -56,13 +56,13 @@ public class JsonUtilTest {
 		
 		System.out.println(JsonUtil.beanToJson(user, new String[]{"name", "list"}));
 		System.out.println(JsonUtil.beanToJson(user, new String[]{"name", "time"}, "yyyy-MM-dd HH:mm:ss.SSS"));
-		System.out.println(JsonUtil.beanToJson(user, new String[]{"name", "time"}, "yyyy年MM月dd日 HH:mm:ss.SSS"));
+		System.out.println(JsonUtil.beanToJson(user, new String[]{"name", "time"}, "yyyy年MM月dd日  HH:mm:ss.SSS"));
 	}
 	
 	@Test
 	public void jsonToBeanTest() {
 		System.out.println(JsonUtil.jsonToBean("{\"name\":\"alex\",\"time\":\"1314450370849\",\"age\":33}", TestUserBean.class));
-		System.out.println(JsonUtil.jsonToBean("{\"age\":23,\"name\":\"alex\",\"time\":\"2011-08-27 21:10:24.193\"}", TestUserBean.class, "yyyy-MM-dd HH:mm:ss.SSS"));
+		System.out.println(JsonUtil.jsonToBean("{\"age\":23,\"name\":\"alex\",\"time\":\"2012-12-01 19:06:10.849\"}", TestUserBean.class, "yyyy-MM-dd HH:mm:ss.SSS"));
 		System.out.println(JsonUtil.jsonToBean("{\"age\":23,\"name\":\"alex\",\"time\":\"2011年08月27日 19:06:10.849\"}", TestUserBean.class, "yyyy年MM月dd日 HH:mm:ss.SSS"));
 		System.out.println(JsonUtil.jsonToBean("{\"age\":23,\"name\":\"alex\",\"time\":1314454167911,\"list\":[{\"gid\":123,\"novelName\":\"斗破苍穹\",\"id\":0},{\"gid\":123,\"novelName\":\"斗破苍穹\",\"id\":0},{\"gid\":123,\"novelName\":\"斗破苍穹\",\"id\":0}]}", TestUserBean.class));
 	}
