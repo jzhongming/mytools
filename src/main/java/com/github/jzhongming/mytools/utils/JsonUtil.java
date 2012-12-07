@@ -10,7 +10,6 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.util.ISO8601DateFormat;
 import org.codehaus.jettison.json.JSONObject;
 
 /**
