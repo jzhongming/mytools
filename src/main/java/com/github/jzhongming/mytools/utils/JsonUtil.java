@@ -55,7 +55,7 @@ public class JsonUtil {
 		try {
 			if (StringUtil.isNotEmpty(dateFormat)) {
 				DateFormat df = new SimpleDateFormat(dateFormat);
-				mapper.getSerializationConfig().withDateFormat(df);  
+				mapper.getSerializationConfig().withDateFormat(df);
 			}
 
 			jsonStr = mapper.writeValueAsString(bean);
@@ -188,7 +188,7 @@ public class JsonUtil {
 			if (StringUtil.isNotEmpty(dateFormat)) {
 				DateFormat df = new SimpleDateFormat(dateFormat);
 				mapper.getDeserializationConfig().setDateFormat(df);
-//				mapper.getDeserializationConfig().withDateFormat(df);
+				// mapper.getDeserializationConfig().withDateFormat(df);
 			}
 
 			bean = mapper.readValue(jsonStr, clazz);
@@ -212,13 +212,13 @@ public class JsonUtil {
 	public static <T> T jsonToBean(URL url, Class<T> clazz,
 			final String dateFormat) {
 		ObjectMapper mapper = new ObjectMapper();
-		
+
 		T bean = null;
 		try {
 			if (StringUtil.isNotEmpty(dateFormat)) {
 				DateFormat df = new SimpleDateFormat(dateFormat);
 				mapper.getDeserializationConfig().setDateFormat(df);
-//				mapper.getDeserializationConfig().withDateFormat(df);
+				// mapper.getDeserializationConfig().withDateFormat(df);
 			}
 
 			bean = mapper.readValue(url, clazz);

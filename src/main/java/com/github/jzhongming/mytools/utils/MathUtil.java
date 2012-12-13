@@ -87,7 +87,7 @@ public class MathUtil {
 		int low = 0, high = array.length - 1;
 
 		while (low <= high) {
-			int middle = low + ((high - low) >> 1);// 去除法，提高性能
+			int middle = low + ((high - low) >> 1);// 减小Int溢出
 
 			if (array[middle] > value) {
 				high = middle - 1;
@@ -100,23 +100,6 @@ public class MathUtil {
 		return -1;
 	}
 
-	public static int nextPowerOfTwo(int value) {
-		// The algorithm below does not work if value is zero:
-		if (value == 0) {
-			return 1;
-		}
-
-		// This uses the bit-twiddling hacks described on the Stanford site:
-		int result = value - 1;
-		result |= result >> 1;
-		result |= result >> 2;
-		result |= result >> 4;
-		result |= result >> 8;
-		result |= result >> 16;
-
-		return ++result;
-	}
-
 	/**
 	 * Returns true if the argument is a power of two.
 	 * 
@@ -125,7 +108,23 @@ public class MathUtil {
 	 * @return true if the argument is a power of two
 	 */
 	public static boolean isPowerOfTwo(long n) {
-		return (n > 0) && ((n & (n - 1)) == 0);
+		return ((n & (n - 1)) == 0);
+	}
+	
+	public static int nextPowerOfTwo(int value) {
+		// The algorithm below does not work if value is zero:
+		if (isPowerOfTwo(value)) {
+			return value;
+		}
+
+		// This uses the bit-twiddling hacks described on the Stanford site:
+		value |= value >> 1;
+		value |= value >> 2;
+		value |= value >> 4;
+		value |= value >> 8;
+		value |= value >> 16;
+
+		return value + 1;
 	}
 
 	public static void main(String[] args) {
@@ -140,5 +139,7 @@ public class MathUtil {
 		for (int i = 0; i < 10; ++i) {
 			System.out.println(i + " : " + nextPowerOfTwo(i) + " : " + isPowerOfTwo(nextPowerOfTwo(i)));
 		}
+		System.out.println(PI);
+		System.out.println(E);
 	}
 }
