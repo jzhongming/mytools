@@ -27,7 +27,7 @@ public class MathUtil {
 	 * @return
 	 */
 	public static boolean isOdd(final int num) {
-		return !isEven(num);
+		return (num & 0x0001) == 1;
 	}
 
 	/**
@@ -112,7 +112,7 @@ public class MathUtil {
 	}
 	
 	public static int nextPowerOfTwo(int value) {
-		// The algorithm below does not work if value is zero:
+		// If the value isPowerOfTwo, return the value
 		if (isPowerOfTwo(value)) {
 			return value;
 		}
@@ -126,6 +126,43 @@ public class MathUtil {
 
 		return value + 1;
 	}
+	/**
+	 * 交换数组对应位置数据
+	 * @param array
+	 * @param i
+	 * @param j
+	 */
+	public static void swap(int[] array, int i, int j) {
+		if (i == j)
+			return;
+		
+		array[i] ^= array[j];
+		array[j] ^= array[i];
+		array[i] ^= array[j];
+	}
+
+	/**
+	 * 洗牌问题，反向模拟洗牌
+	 * @param array
+	 */
+	public static void Shuffle1(int[] array) {
+		int N = array.length - 1;
+		for (int i = 0; i <= N; i++) {
+			swap(array, (N - i), (int) (Math.random() * (N - i + 1)));// 修正概率问题
+		}
+	}
+
+	/**
+	 * 洗牌问题，正向模拟洗牌
+	 * @param array
+	 */
+	public static void Shuffle2(int[] array) {
+		int N = array.length - 1;
+		for (int i = 0; i <= N; i++) {
+			swap(array, i, (int) (Math.random() * (N - i + 1 )) + i);
+		}
+	}
+	
 
 	public static void main(String[] args) {
 		System.out.println(MathUtil.isEven(-432422));
@@ -141,5 +178,7 @@ public class MathUtil {
 		}
 		System.out.println(PI);
 		System.out.println(E);
+		System.out.println((int)(0.2001*16));
+		System.out.println((int)(0.1599*16));
 	}
 }
