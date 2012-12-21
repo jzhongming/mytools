@@ -3,6 +3,7 @@ package com.github.jzhongming.mytools.utils;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -12,7 +13,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Gzip 工具类，将byte数组进行Gzip压缩
+ * 压缩工具类，将byte数组进行Gzip、Zip压缩
  * 
  * @author Alex (j.zhongming@gmail.com)
  */
@@ -24,86 +25,76 @@ public class CompressUtil {
 
 	private static final Log logger = LogFactory.getLog(CompressUtil.class);
 
-	public static byte[] zipCompress(byte[] in) {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream(in.length);
-		DeflaterOutputStream os = new DeflaterOutputStream(baos);
+	private static final int COMPRESS_RATIO = Deflater.DEFLATED;
+
+	/**
+	 * 将data进行Zip压缩
+	 * @param data
+	 * @return
+	 */
+	public static byte[] zipCompress(byte[] data) {
+		if (data == null || data.length == 0) {
+			throw new IllegalArgumentException("zipCompress data is empty or null");
+		}
+
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		DeflaterOutputStream  zipos = new DeflaterOutputStream (baos);
+		byte[] rv = null;
 		try {
-			os.write(in);
-			os.finish();
-			try {
-				os.close();
-			} catch (IOException e) {
-				logger.error("Close DeflaterOutputStream error", e);
-			}
+			zipos.write(data);
+			zipos.finish();
+			rv = baos.toByteArray();
+//			logger.warn("zipCompress " + data.length + " bytes to " + rv.length);
 		} catch (IOException e) {
 			throw new RuntimeException("IO exception compressing data", e);
+		} finally {
+			try {
+				zipos.close();
+			} catch (IOException e) {
+				logger.error("failed to close ZipOutputStream", e);
+			}
+			try {
+				baos.close();
+			} catch (IOException e) {
+				logger.error("failed to close ByteArrayOutputStream", e);
+			}
+		}
+		return rv;
+	}
+
+	/**
+	 * 将数据进行Zip解压缩
+	 * @param data
+	 * @return
+	 */
+	public static byte[] zipDecompress(byte[] data) {
+		if (data == null || data.length == 0) {
+			throw new IllegalArgumentException("zipDecompress data is empty or null");
+		}
+
+		ByteArrayInputStream bais = new ByteArrayInputStream(data);
+		InflaterInputStream zips = new InflaterInputStream(bais);
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		byte[] rv = null;
+		try {
+			byte[] buf = new byte[COMPRESS_RATIO * data.length];
+
+			int r = -1;
+			while ((r = zips.read(buf)) > 0) {
+				baos.write(buf, 0, r);
+			}
+			rv = baos.toByteArray();
+//			logger.warn("zipDecompress " + data.length + " bytes to " + rv.length);
+		} catch (IOException e) {
+			logger.error("IO exception decompressing data", e);
 		} finally {
 			try {
 				baos.close();
 			} catch (IOException e) {
-				logger.error("Close ByteArrayOutputStream error", e);
+				logger.error("failed to close ByteArrayOutputStream");
 			}
-		}
-		return baos.toByteArray();
-	}
-
-	public static byte[] gzipCompress(byte[] in) {
-		if (in == null) {
-			throw new NullPointerException("Can't compress null");
-		}
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		GZIPOutputStream gz = null;
-		try {
-			gz = new GZIPOutputStream(bos);
-			gz.write(in);
-		} catch (IOException e) {
-			throw new RuntimeException("IO exception compressing data", e);
-		} finally {
-			if (gz != null) {
-				try {
-					gz.close();
-				} catch (IOException e) {
-					logger.error("Close GZIPOutputStream error", e);
-				}
-			}
-			if (bos != null) {
-				try {
-					bos.close();
-				} catch (IOException e) {
-					logger.error("Close ByteArrayOutputStream error", e);
-				}
-			}
-		}
-		byte[] rv = bos.toByteArray();
-		// log.debug("Compressed %d bytes to %d", in.length, rv.length);
-		return rv;
-	}
-
-	private static final int COMPRESS_RATIO = 8;
-
-	public static byte[] zipDecompress(byte[] in) {
-		int size = in.length * COMPRESS_RATIO;
-		ByteArrayInputStream bais = new ByteArrayInputStream(in);
-		InflaterInputStream is = new InflaterInputStream(bais);
-		ByteArrayOutputStream baos = new ByteArrayOutputStream(size);
-		try {
-			byte[] uncompressMessage = new byte[size];
-			while (true) {
-				int len = is.read(uncompressMessage);
-				if (len <= 0) {
-					break;
-				}
-				baos.write(uncompressMessage, 0, len);
-			}
-			baos.flush();
-			return baos.toByteArray();
-
-		} catch (IOException e) {
-			logger.error("Failed to decompress data", e);
-			baos = null;
-		} finally {
 			try {
-				is.close();
+				zips.close();
 			} catch (IOException e) {
 				logger.error("failed to close InflaterInputStream");
 			}
@@ -112,52 +103,89 @@ public class CompressUtil {
 			} catch (IOException e) {
 				logger.error("failed to close ByteArrayInputStream");
 			}
+		}
+		return rv;
+	}
+
+	/**
+	 * 将数据进行Gzip压缩
+	 * @param data
+	 * @return
+	 */
+	public static byte[] gzipCompress(byte[] data) {
+		if (data == null || data.length == 0) {
+			throw new IllegalArgumentException("compress data is empty or null");
+		}
+
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		GZIPOutputStream gzipos = null;
+		byte[] rv = null;
+		try {
+			gzipos = new GZIPOutputStream(baos);
+			gzipos.write(data);
+			gzipos.finish();
+			rv = baos.toByteArray();
+//			logger.warn("gzipCompress " + data.length + " bytes to " + rv.length);
+		} catch (IOException e) {
+			throw new RuntimeException("IO exception compressing data", e);
+		} finally {
 			try {
 				baos.close();
 			} catch (IOException e) {
-				logger.error("failed to close ByteArrayOutputStream");
+				logger.error("Close ByteArrayOutputStream error", e);
+			}
+			if (gzipos != null) {
+				try {
+					gzipos.close();
+				} catch (IOException e) {
+					logger.error("Close GZIPOutputStream error", e);
+				}
 			}
 		}
-		return baos == null ? null : baos.toByteArray();
+		return rv;
 	}
 
-	public static byte[] gzipDecompress(byte[] in) {
-		ByteArrayOutputStream bos = null;
-		if (in != null) {
-			ByteArrayInputStream bis = new ByteArrayInputStream(in);
-			bos = new ByteArrayOutputStream();
-			GZIPInputStream gis = null;
+	/**
+	 * 将数据进行解压缩
+	 * @param data
+	 * @return
+	 */
+	public static byte[] gzipDecompress(byte[] data) {
+		if (data == null || data.length == 0) {
+			throw new IllegalArgumentException("gzipDecompress data is empty or null");
+		}
+
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ByteArrayInputStream bais = new ByteArrayInputStream(data);
+		GZIPInputStream gzips = null;
+		byte[] rv = null;
+		try {
+			gzips = new GZIPInputStream(bais);
+			byte[] buf = new byte[COMPRESS_RATIO * data.length];
+			int r = -1;
+			while ((r = gzips.read(buf)) > 0) {
+				baos.write(buf, 0, r);
+			}
+			rv = baos.toByteArray();
+//			logger.warn("gzipDecompress " + data.length + " bytes to " + rv.length);
+		} catch (IOException e) {
+			logger.error("Failed to decompress data", e);
+		} finally {
+			if (gzips != null) {
+				try {
+					gzips.close();
+				} catch (IOException e) {
+					logger.error("Close GZIPInputStream error", e);
+				}
+			}
 			try {
-				gis = new GZIPInputStream(bis);
-
-				byte[] buf = new byte[16 * 1024];
-				int r = -1;
-				while ((r = gis.read(buf)) > 0) {
-					bos.write(buf, 0, r);
-				}
+				bais.close();
 			} catch (IOException e) {
-				logger.error("Failed to decompress data", e);
-				bos = null;
-			} finally {
-				if (gis != null) {
-					try {
-						gis.close();
-					} catch (IOException e) {
-						logger.error("Close GZIPInputStream error", e);
-					}
-				}
-				if (bis != null) {
-					try {
-						bis.close();
-					} catch (IOException e) {
-						logger.error("Close ByteArrayInputStream error", e);
-					}
-				}
+				logger.error("Close ByteArrayInputStream error", e);
 			}
 		}
-		return bos == null ? null : bos.toByteArray();
+		return rv;
 	}
-
 	/**
 	 * 将Byte数组进行Gzip压缩
 	 * 
@@ -210,6 +238,6 @@ public class CompressUtil {
 			bos.close();
 			gzi.close();
 		}
-		return decompressed;
+		return decompressed; 
 	}
 }

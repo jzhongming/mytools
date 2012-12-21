@@ -1,5 +1,11 @@
 package com.github.jzhongming.mytools.utils;
 
+
+/**
+ * 数学相关工具类
+ * @author j.zhongming@gmail.com
+ *
+ */
 public class MathUtil {
 	private MathUtil() {
 	}
@@ -29,7 +35,7 @@ public class MathUtil {
 	public static boolean isOdd(final int num) {
 		return (num & 0x0001) == 1;
 	}
-
+	
 	/**
 	 * 反转指定数组
 	 * 
@@ -99,6 +105,16 @@ public class MathUtil {
 		}
 		return -1;
 	}
+	
+	/**
+	 * 返回start到end之前的随机数，不包括end
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	public static int random(int start, int end) {
+		return (int)(Math.random() * (end-start)) + start;
+	}
 
 	/**
 	 * Returns true if the argument is a power of two.
@@ -142,10 +158,10 @@ public class MathUtil {
 	}
 
 	/**
-	 * 洗牌问题，反向模拟洗牌
+	 * 洗牌问题，模拟洗牌，修正概率问题
 	 * @param array
 	 */
-	public static void Shuffle1(int[] array) {
+	public static void Shuffle(int[] array) {
 		int N = array.length - 1;
 		for (int i = 0; i <= N; i++) {
 			swap(array, (N - i), (int) (Math.random() * (N - i + 1)));// 修正概率问题
@@ -153,15 +169,20 @@ public class MathUtil {
 	}
 
 	/**
-	 * 洗牌问题，正向模拟洗牌
+	 * 洗牌问题，模拟洗牌，概率错误
 	 * @param array
 	 */
-	public static void Shuffle2(int[] array) {
-		int N = array.length - 1;
-		for (int i = 0; i <= N; i++) {
-			swap(array, i, (int) (Math.random() * (N - i + 1 )) + i);
-		}
-	}
+//	public static void Shuffle2(int[] array) {
+////		int N = array.length;
+////		for (int i = 0; i <= N; i++) {
+////			swap(array, i, (int) (Math.random() * (N - i + 1 )) + i);
+////		}
+//		
+//		for(int idx=0; idx<array.length; idx++) {
+//	        swap(array, (int)(Math.random() * N), (int)(Math.random() * N));
+//	    }
+//	}
+	
 	
 
 	public static void main(String[] args) {
@@ -178,7 +199,8 @@ public class MathUtil {
 		}
 		System.out.println(PI);
 		System.out.println(E);
-		System.out.println((int)(0.2001*16));
-		System.out.println((int)(0.1599*16));
+		for(int i=0; i< 100; i++) {
+			System.out.println(random(0, 2));
+		}
 	}
 }

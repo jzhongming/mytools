@@ -11,7 +11,7 @@ import org.junit.Test;
 
 public class JsonUtilTest {
 	
-	@Test
+//	@Test
 	public void map2JSONStringTest() {
 		Map<String, Object> map = new HashMap<String, Object>(3);
 		map.put("name", "alex");
@@ -20,7 +20,7 @@ public class JsonUtilTest {
 		System.out.println(JsonUtil.map2JSONString(map));
 	}
 	
-	@Test
+//	@Test
 	public void beanToJsonTest() {
 		TestUserBean user = new TestUserBean();
 		user.setAge(23);
@@ -39,7 +39,7 @@ public class JsonUtilTest {
 		System.out.println(JsonUtil.beanToJson(user, "yyyy-MM-dd HH:mm:ss.SSS"));
 	}
 	
-	@Test
+//	@Test
 	public void beanToJsonFieldTest() {
 		TestUserBean user = new TestUserBean();
 		user.setAge(23);

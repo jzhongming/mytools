@@ -13,10 +13,13 @@ public final class SystemUtil {
 	private static boolean isLinuxPlatform = false;
 	private static boolean isAfterJava6u4Version = false;
 
-	public static final String OS_NAME = System.getProperty("os.name");
 	public static final String JAVA_VERSION = System.getProperty("java.version");
 	public static final String JAVA_VENDOR = System.getProperty("java.vendor");
-
+	public static final String OS_NAME = System.getProperty("os.name");
+	public static final String OS_VERSION = System.getProperty("os.version");
+	public static final String OS_ARCH = System.getProperty("os.arch");
+	public static final String USER_LANGUAGE = System.getProperty("user.language");
+	
 	static {
 		if (OS_NAME != null && OS_NAME.toLowerCase().indexOf("linux") >= 0) {
 			isLinuxPlatform = true;
@@ -59,17 +62,34 @@ public final class SystemUtil {
 	public static int getCpuProcessorCount() {
 		return Runtime.getRuntime().availableProcessors();
 	}
-
-	public static void main(final String[] args) throws IOException {
-		System.out.println("OS NAME: " + OS_NAME);
-		System.out.println("JAVA VENDOR: " + JAVA_VENDOR);
-		System.out.println("JAVA VERSION: " + JAVA_VERSION);
-		System.out.println("Is 64Version: " + isAfterJava6u4Version());
-		System.out.println("Is LinuxPlatform: " + isLinuxPlatform());
-		System.out.println("CPU counts: " + getCpuProcessorCount());
-		System.out.println(openSelector().toString());
+	
+	/**
+	 * 增加JVM停止时要做处理事件
+	 */
+	public static void addJVMShutDownHook(Runnable runnable) {
+		Runtime.getRuntime().addShutdownHook(new Thread(runnable));
 	}
 
+	public static String getJavaVersion() {
+		return JAVA_VERSION;
+	}
+
+	public static String getJavaVendor() {
+		return JAVA_VENDOR;
+	}
+
+	public static String getOSName() {
+		return OS_NAME;
+	}
+
+	public static String getOSArch() {
+		return OS_ARCH;
+	}
+	
+	public static String getUserLanguage() {
+		return USER_LANGUAGE;
+	}
+	
 	public static Selector openSelector() throws IOException {
 		Selector result = null;
 		// 在linux平台，尽量启用epoll实现
@@ -102,4 +122,18 @@ public final class SystemUtil {
 		return result;
 
 	}
+
+	public static void main(final String[] args) throws IOException {
+		System.out.println("OS NAME: " + OS_NAME);
+		System.out.println("OS_VERSION: " + OS_VERSION);
+		System.out.println("OS_ARCH: " + OS_ARCH);
+		System.out.println("USER_LANGUAGE:" + USER_LANGUAGE);
+		System.out.println("JAVA VENDOR: " + JAVA_VENDOR);
+		System.out.println("JAVA VERSION: " + JAVA_VERSION);
+		System.out.println("Is 64Version: " + isAfterJava6u4Version());
+		System.out.println("Is LinuxPlatform: " + isLinuxPlatform());
+		System.out.println("CPU counts: " + getCpuProcessorCount());
+		System.out.println(openSelector().toString());
+	}
+
 }

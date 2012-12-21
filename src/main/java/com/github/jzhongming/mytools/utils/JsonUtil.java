@@ -180,6 +180,7 @@ public class JsonUtil {
 	 * @param clazz
 	 * @return
 	 */
+	@SuppressWarnings("deprecation")
 	public static <T> T jsonToBean(String jsonStr, Class<T> clazz,
 			final String dateFormat) {
 		ObjectMapper mapper = new ObjectMapper();
@@ -188,7 +189,7 @@ public class JsonUtil {
 			if (StringUtil.isNotEmpty(dateFormat)) {
 				DateFormat df = new SimpleDateFormat(dateFormat);
 				mapper.getDeserializationConfig().setDateFormat(df);
-				// mapper.getDeserializationConfig().withDateFormat(df);
+//				 mapper.getDeserializationConfig().withDateFormat(df);
 			}
 
 			bean = mapper.readValue(jsonStr, clazz);
@@ -209,6 +210,7 @@ public class JsonUtil {
 	 * @param clazz
 	 * @return
 	 */
+	@SuppressWarnings("deprecation")
 	public static <T> T jsonToBean(URL url, Class<T> clazz,
 			final String dateFormat) {
 		ObjectMapper mapper = new ObjectMapper();
@@ -218,7 +220,7 @@ public class JsonUtil {
 			if (StringUtil.isNotEmpty(dateFormat)) {
 				DateFormat df = new SimpleDateFormat(dateFormat);
 				mapper.getDeserializationConfig().setDateFormat(df);
-				// mapper.getDeserializationConfig().withDateFormat(df);
+//				 mapper.getDeserializationConfig().withDateFormat(df);
 			}
 
 			bean = mapper.readValue(url, clazz);
