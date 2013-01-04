@@ -101,14 +101,14 @@ public class ByteUtil {
 				| (((long) buf[7 + offset] << 56) & 0xff00000000000000L);
 	}
 
-	public static final byte[] shortToBytesBigEndian1(final short n) {
+	public static final byte[] shortToBytesBigEndian(final short n) {
 		byte[] buf = new byte[2];
 		buf[0] = (byte) ((n & 0xff00) >> 8);
 		buf[1] = (byte) ( n & 0x00ff);
 		return buf;
 	}
 
-	public static final byte[] intToBytesBigEndian1(final int n) {
+	public static final byte[] intToBytesBigEndian(final int n) {
 		byte[] buf = new byte[4];
 		buf[0] = (byte) ((n & 0xff000000) >> 24);
 		buf[1] = (byte) ((n & 0x00ff0000) >> 16);
@@ -117,7 +117,7 @@ public class ByteUtil {
 		return buf;
 	}
 
-	public static final byte[] longToBytesBigEndian1(final long n) {
+	public static final byte[] longToBytesBigEndian(final long n) {
 		byte[] buf = new byte[8];
 		buf[0] = (byte) ((n & 0xff00000000000000L) >> 56);
 		buf[1] = (byte) ((n & 0x00ff000000000000L) >> 48);
@@ -130,7 +130,7 @@ public class ByteUtil {
 		return buf;
 	}
 	
-	public static final byte[] shortToBytesLittleEndian1(final short n) {
+	public static final byte[] shortToBytesLittleEndian(final short n) {
 		byte[] buf = new byte[2];
 		buf[0] = (byte) ((short) n & 0x00ff);
 		buf[1] = (byte) (((short) n & 0xff00) >> 8);

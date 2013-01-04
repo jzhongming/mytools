@@ -3,6 +3,8 @@ package com.github.jzhongming.mytools.utils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * 编码转换工具类
  * 
@@ -10,35 +12,41 @@ import java.util.regex.Pattern;
  */
 public class CodeToolUtil {
 
-	private static final char[] c = { '<', '>', '&', '\"' };
-	private static final String[] expansion = { "&lt;", "&gt;", "&amp;", "&quot;" };
-
 	private CodeToolUtil() {
 
 	}
-
+	
 	/**
 	 * 将串中的 <, >, &, " 编码为html的表示方式
 	 * 
 	 * @param s
 	 * @return
 	 */
-	public static String HTMLEncode(String s) {
-		StringBuffer st = new StringBuffer();
-		for (int i = 0; i < s.length(); i++) {
-			boolean copy = true;
-			char ch = s.charAt(i);
-			for (int j = 0; j < c.length; j++) {
-				if (c[j] == ch) {
-					st.append(expansion[j]);
-					copy = false;
-					break;
-				}
-			}
-			if (copy)
-				st.append(ch);
+	public static String HTMLEncode(String str) {
+		if (StringUtils.isEmpty(str)) {
+			return "";
 		}
-		return st.toString();
+		char content[] = str.toCharArray();
+		StringBuffer result = new StringBuffer();
+		for (char c : content) {
+			switch (c) {
+			case '<':
+				result.append("&lt;");
+				break;
+			case '>':
+				result.append("&gt;");
+				break;
+			case '&':
+				result.append("&amp;");
+				break;
+			case '"':
+				result.append("&quot;");
+				break;
+			default:
+				result.append(c);
+			}
+		}
+		return result.toString();
 	}
 
 	/**
@@ -48,7 +56,7 @@ public class CodeToolUtil {
 	 * @return
 	 */
 	public static String HTMLDecode(String s) {
-		return (null == s || 0 == (s = s.trim()).length()) ? s : s
+		return (StringUtils.isBlank(s)) ? s : s
 				.replaceAll("&lt;", "<").replaceAll("&gt;", ">")
 				.replaceAll("&amp;", "&").replaceAll("&quot;", "\"");
 	}
