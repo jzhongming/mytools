@@ -10,8 +10,10 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
@@ -116,6 +118,25 @@ public class NetworkUtil {
 	}
 	
 	/**
+	 * 通过域名获得IP地址
+	 * @param www
+	 * @return
+	 */
+	public static List<String> getAddressByDNS(final String www) {
+		List<String> list = new ArrayList<String>();
+		try {
+			InetAddress[] addrs = InetAddress.getAllByName(www);
+			for(InetAddress addr : addrs) {
+				list.add(ipToString(addr.getAddress()));
+			}
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+			throw new RuntimeException("unable to retrieve host names of " + www);
+		}
+		return list;
+	}
+	
+	/**
 	 * 指定IP地址是否可达
 	 * @param ip
 	 * @param timeout
@@ -172,20 +193,26 @@ public class NetworkUtil {
 		return false;
 	}
 
-//	public static void main(String[] args) throws UnknownHostException {
-//		String[] hosts = getLocalHostNames();
-//		for (String s : hosts) {
-//			System.out.println(s);
-//		}
-//
-//		System.out.println(getLocalhostName());
-//		System.out.println(getIPV6AddressByName("eth3"));
-//		System.out.println(getIPV4AddressByName("eth3"));
-//		
-//		boolean b = isAddressAvailable("127.0.0.1", 5000);
-//		System.out.println(b);
-//		
-//		b = isReachable(InetAddress.getByName("127.0.0.1"), InetAddress.getByName("127.0.0.1"), 49155, 5000);
-//		System.out.println(b);
-//	}
+	public static void main(String[] args) throws UnknownHostException {
+		String[] hosts = getLocalHostNames();
+		for (String s : hosts) {
+			System.out.println(s);
+		}
+
+		System.out.println(getLocalhostName());
+		System.out.println(getIPV6AddressByName("eth3"));
+		System.out.println(getIPV4AddressByName("eth3"));
+		
+		boolean b = isAddressAvailable("127.0.0.1", 5000);
+		System.out.println(b);
+		
+		b = isReachable(InetAddress.getByName("127.0.0.1"), InetAddress.getByName("127.0.0.1"), 49155, 5000);
+		System.out.println(b);
+		
+		
+		System.out.println("=======================================");
+		List<String> addrlist = getAddressByDNS("www.sina.com");
+		for(String s : addrlist)
+			System.out.println(s);
+	}
 }

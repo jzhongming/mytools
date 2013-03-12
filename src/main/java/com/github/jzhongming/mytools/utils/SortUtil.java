@@ -188,6 +188,27 @@ public class SortUtil {
 			}
 		}
 	}
+	
+	public static void mergeSort(int[] array) {
+		
+		
+	}
+	
+	/**
+	 * 将有序的array[s...m],array[m+1...e]合并成array[s...e]
+	 * @param array
+	 * @param s (start Index)
+	 * @param m (middle Index)
+	 * @param e (end Index)
+	 */
+	public static void twoWayMerge(int[] array, int s, int m, int e) {
+		int i = s, j = m+1, k=0;
+		int[] C = new int[e+1];
+		while(i<=m && j<=e) {
+			C[k++] = (array[i] < array[j]) ? array[i++] : array[j++];
+		}
+		System.arraycopy(C, 0, array, 0, e);
+	}
 
 //	稳定 nlgn
 	public static int[] Two_Way_Merge_Sort(int[] A, int[] B) {
@@ -203,5 +224,12 @@ public class SortUtil {
 			C[k++] = B[j++];
 		
 		return C;
+	}
+	public static void main(String[] args) {
+		int[] array = {1,3,5,7, 2,4,6,8,9};
+		twoWayMerge(array, 0, 3, 8);
+		for(int a : array) {
+			System.out.println(a);
+		}
 	}
 }
