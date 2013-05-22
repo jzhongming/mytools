@@ -52,8 +52,7 @@ public class Base64 {
 																			// at
 																			// end.
 		int cCnt = eIx - sIx + 1; // Content count including possible separators
-		int sepCnt = charsLen > 76 ? (chars[76] == '\r' ? cCnt / 78 : 0) << 1
-				: 0;
+		int sepCnt = charsLen > 76 ? (chars[76] == '\r' ? cCnt / 78 : 0) << 1 : 0;
 
 		int len = ((cCnt - sepCnt) * 6 >> 3) - pad; // The number of decoded
 													// bytes
@@ -190,8 +189,7 @@ public class Base64 {
 																					// at
 																					// end.
 		int cCnt = eIx - sIx + 1; // Content count including possible separators
-		int sepCnt = sLen > 76 ? (s.charAt(76) == '\r' ? cCnt / 78 : 0) << 1
-				: 0;
+		int sepCnt = sLen > 76 ? (s.charAt(76) == '\r' ? cCnt / 78 : 0) << 1 : 0;
 
 		int len = ((cCnt - sepCnt) * 6 >> 3) - pad; // The number of decoded
 													// bytes
@@ -228,10 +226,10 @@ public class Base64 {
 
 		return dArr;
 	}
-	
+
 	public static void main(String[] args) throws IOException {
-		byte[] b = Base64.decodeFast("aHR0cDovLw==");
+		byte[] b = Base64.decodeFast("aHR0cDovLy1fXy8vLy0tX18tLV9fYWE=");
 		System.out.println(new String(b));
-		System.out.println("\n" + Base64Util.encodeBytes("http://".getBytes()));
+		System.out.println("\n" + Base64Util.encodeBytes("http://-__///--__--__aa".getBytes()));
 	}
 }
