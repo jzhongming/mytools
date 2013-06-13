@@ -9,8 +9,8 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.InflaterInputStream;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 压缩工具类，将byte数组进行Gzip、Zip压缩
@@ -23,7 +23,7 @@ public class CompressUtil {
 
 	}
 
-	private static final Log logger = LogFactory.getLog(CompressUtil.class);
+	private static final Logger logger = LoggerFactory.getLogger(CompressUtil.class);
 
 	private static final int COMPRESS_RATIO = Deflater.DEFLATED;
 
