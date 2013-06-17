@@ -5,6 +5,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+/**
+ * Trie树实体类
+ * @author j.zhongming@gmail.com
+ *
+ */
 public class Trie {
 
 	protected int ruleIndex; // Trie属于哪条规则，在DATWriter->rules中的位置  未成词时为 0

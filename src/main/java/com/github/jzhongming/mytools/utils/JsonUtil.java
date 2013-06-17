@@ -7,10 +7,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jettison.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * JSON工具类
@@ -19,7 +19,7 @@ import org.codehaus.jettison.json.JSONObject;
  * 
  */
 public class JsonUtil {
-	protected static final Log logger = LogFactory.getLog(JsonUtil.class);
+	protected static final Logger logger = LoggerFactory.getLogger(JsonUtil.class);
 
 	/**
 	 * 将对象（List、Object...）转换成json的字符串.

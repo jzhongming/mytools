@@ -16,11 +16,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class NetworkUtil {
-	private static final Log logger = LogFactory.getLog(NetworkUtil.class);
+	private static final Logger logger = LoggerFactory.getLogger(NetworkUtil.class);
 
 	public static String[] getLocalHostNames() {
 		final Set<String> hostNames = new HashSet<String>();

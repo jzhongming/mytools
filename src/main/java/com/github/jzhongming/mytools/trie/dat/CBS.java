@@ -1,7 +1,12 @@
 package com.github.jzhongming.mytools.trie.dat;
 
+/**
+ * 双数组单元，存储双数组对应信息
+ * @author j.zhongming@gmail.com
+ *
+ */
 public class CBS {
-	/** 如果是个关键字，则m_base为负数 */
+	/** m_base为负数 */
 	protected int m_base;
 
 	/** m_check=0表示空闲,m_check=-1表示首字 */
@@ -21,5 +26,4 @@ public class CBS {
 	public String toString() {
 		return "CBS [m_base=" + m_base + ", m_check=" + m_check + "]";
 	}
-
 }
