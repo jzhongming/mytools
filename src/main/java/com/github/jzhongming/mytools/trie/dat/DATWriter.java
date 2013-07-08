@@ -400,52 +400,52 @@ public class DATWriter {
 	}
 	
 	private static final byte[] serialize(Serializable data) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
-        ObjectOutputStream out = null;
-        try {
-            // stream closed in the finally
-            out = new ObjectOutputStream(baos);
-            out.writeObject(data);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException ex) {
-                // ignore close exception
-            }
-        }
-        return baos.toByteArray();
-    }
-	
+		ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
+		ObjectOutputStream out = null;
+		try {
+			// stream closed in the finally
+			out = new ObjectOutputStream(baos);
+			out.writeObject(data);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (out != null) {
+					out.close();
+				}
+			} catch (IOException ex) {
+				// ignore close exception
+			}
+		}
+		return baos.toByteArray();
+	}
+
 	private static final Object deserialize(byte[] data) {
-        if (data == null) {
-            throw new IllegalArgumentException("The byte[] must not be null");
-        }
-        ByteArrayInputStream bais = new ByteArrayInputStream(data);
-        ObjectInputStream in = null;
-        try {
-            // stream closed in the finally
-            in = new ObjectInputStream(bais);
-            return in.readObject();
-            
-        } catch (Exception e) {
-          	e.printStackTrace();
-        } finally {
-            try {
-                if (in != null) {
-                    in.close();
-                }
-            } catch (IOException ex) {
-                // ignore close exception
-            }
-        }
-        return null;
-    }
-	
+		if (data == null) {
+			throw new IllegalArgumentException("The byte[] must not be null");
+		}
+		ByteArrayInputStream bais = new ByteArrayInputStream(data);
+		ObjectInputStream in = null;
+		try {
+			// stream closed in the finally
+			in = new ObjectInputStream(bais);
+			return in.readObject();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (in != null) {
+					in.close();
+				}
+			} catch (IOException ex) {
+				// ignore close exception
+			}
+		}
+		return null;
+	}
+
 	// /**
 	// * Trie排序规则
 	// */
