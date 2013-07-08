@@ -62,7 +62,7 @@ public class DATWriter {
 			cbs[i] = new CBS();
 		}
 		logger.info("init cbs_allocCount: " + cbs_allocCount);
-		buildTrie();
+		buildTrie();//构造DAT
 
 		// 优化数组清理未使用空间
 		cleanCBS();
@@ -112,7 +112,6 @@ public class DATWriter {
 		if (trie.m_childrenIndex.size() > 0) {
 			// 获取其子节点的base值 //这时解决冲突
 			int base = getConsistentBasePos(trie);
-//			System.out.println("base: " + base);
 			// 设置该trie的m_base值
 			cbs[curIndex].m_base = (trie.ruleIndex == 0) ? Math.abs(base) : -1 * Math.abs(base); // 是否成词
 			for (int asc : trie.m_childrenIndex) { // 安排子节点的的Check位置
@@ -131,7 +130,6 @@ public class DATWriter {
 			}
 		}
 	}
-
 
 	private int getConsistentBasePos(final Trie trie) {
 		// int cbs_allocCount; // 已经分配的bc单元数
@@ -278,7 +276,6 @@ public class DATWriter {
 				dos.close();
 			}
 		}
-		System.out.println(this);
 		logger.info("MMap file dump success. Time: {}(ms) path: {}", (System.currentTimeMillis() - t), file.getPath());
 	}
 
@@ -479,9 +476,6 @@ public class DATWriter {
 			return trie1.m_childrenIndex.size() > trie2.m_childrenIndex.size() ? 1 : -1;
 		}
 	};
-
-	
-	
 
 	@Override
 	public String toString() {

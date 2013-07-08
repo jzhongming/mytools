@@ -33,7 +33,7 @@ public class SortUtil {
 	}
 
 	private static <E> void qsort(E[] array, int begin, int end, Comparator<? super E> cmp) {
-		if (end > begin) {
+		if (begin < end) {
 			int index = partition(array, begin, end, cmp);
 			qsort(array, begin, index - 1, cmp);
 			qsort(array, index + 1, end, cmp);
@@ -60,15 +60,38 @@ public class SortUtil {
 	}
 
 	private static void qsort(int[] array, int begin, int end) {
-		if (end > begin) {
+		if (begin < end) {
 			int index = partition(array, begin, end);
 			qsort(array, begin, index - 1);
 			qsort(array, index + 1, end);
 		}
 	}
 	
-	public static void quickSort(int[] array) {
+	public static void quickSort_1(int[] array) {
 		qsort(array, 0, array.length-1);
+	}
+	
+	public static void quickSort_2(int[] sort, int begin, int end) {
+		if (begin < end) {
+			int left = begin, right = end, pivot = sort[left];
+			while (left < right) {
+				while (left < right && sort[right] > pivot)
+					right--;
+				if (left < right) {
+					sort[left] = sort[right];
+					left++;
+				}
+				while (left < right && sort[left] < pivot)
+					left++;
+				if (left < right) {
+					sort[right] = sort[left];
+					right--;
+				}
+			}
+			sort[left] = pivot;
+			quickSort_2(sort, begin, left - 1);
+			quickSort_2(sort, left + 1, end);
+		}
 	}
 	
 	//稳定的 O(n)2
@@ -227,7 +250,8 @@ public class SortUtil {
 	}
 	public static void main(String[] args) {
 		int[] array = {1,3,5,7, 2,4,6,8,9};
-		twoWayMerge(array, 0, 3, 8);
+//		quickSort_2(array, 0,  array.length-1);
+		quickSort_1(array);
 		for(int a : array) {
 			System.out.println(a);
 		}

@@ -35,6 +35,11 @@ public class DATBuilder {
 	protected DATBuilder() {
 	}
 	
+	/**
+	 * 创建DatBuilder
+	 * @param dictDir 词典目录
+	 * @param suffix 词典后缀
+	 */
 	public DATBuilder(File dictDir, final String suffix) {
 		if(!dictDir.exists()) {
 			throw new IllegalArgumentException(dictDir.getPath() + " not found!");
@@ -73,19 +78,31 @@ public class DATBuilder {
 	public CBS[] getCBS() {
 		return datWriter.getCBS();
 	}
-	
+	/**
+	 * 规则列表，记录逗号形式规则信息
+	 * @return
+	 */
 	public int[] gerRuleInfo() {
 		return datWriter.getRuleInfo();
 	}
 	
+	/**
+	 * 生成DAT数据文件，即查询索引文件
+	 * @param file
+	 * @throws IOException
+	 */
 	public void writeDATMap(File file) throws IOException {
 		datWriter.dumpMMap(file);
 	}
 	
+	/**
+	 * 加载DAT数据文件方式初始化DATBuilder
+	 * @param datIndex
+	 * @return
+	 */
 	public static DATBuilder loadDATMap(File datIndex) {
 		DATBuilder dat = new DATBuilder();
 		dat.datWriter = new DATWriter().loadMMap(datIndex);
-		System.out.println(dat.datWriter);
 		return dat;
 	}
 	
@@ -96,6 +113,10 @@ public class DATBuilder {
 		}
 	}
 	
+	public List<Pointer> getPointerList(final String content) {
+		return datWriter.check(content);
+	}
+
 	public List<String> check2SpanList(final String content) {
 		List<Pointer> plist = datWriter.check(content);
 		List<String> slist = new ArrayList<String>(plist.size());
@@ -107,9 +128,7 @@ public class DATBuilder {
 	
 	public boolean check2IsSpan(final String content) {
 		Set<String> plist = new HashSet<String>(check2SpanList(content));
-//		int[] ruleInfo = new int[datWriter.getRuleInfo().length];
 		Map<Integer, Integer> ruleInfo = new HashMap<Integer, Integer>();
-//		System.arraycopy(datWriter.getRuleInfo(), 0, ruleInfo, 0, ruleInfo.length);
 		Map<String, List<Integer>> map = datWriter.getRuleMap();
 		for(String s : plist) {
 			for(int index : map.get(s)) {
