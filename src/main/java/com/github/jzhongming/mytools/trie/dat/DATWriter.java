@@ -281,6 +281,9 @@ public class DATWriter {
 
 	@SuppressWarnings("unchecked")
 	public DATWriter loadMMap(File file) {
+		if(null == file || !file.exists() ) {
+			throw new IllegalArgumentException();
+		}
 		DataInputStream dis = null;
 		long t = System.currentTimeMillis();
 		try {
@@ -314,7 +317,7 @@ public class DATWriter {
 			dis.readFully(byteRuleStr);
 			this.ruleStr = (ArrayList<String>) deserialize(byteRuleStr);
 		} catch (Exception e) {
-			logger.error("加载索引文件出错",e);
+			logger.error("加载索引文件出错:" +file.getPath(),e);
 		} finally {
 			if (null != dis) {
 				try {
@@ -400,7 +403,7 @@ public class DATWriter {
 	}
 	
 	private static final byte[] serialize(Serializable data) {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
+		ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
 		ObjectOutputStream out = null;
 		try {
 			// stream closed in the finally

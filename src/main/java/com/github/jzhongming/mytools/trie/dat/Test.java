@@ -49,7 +49,6 @@ public class Test {
 		//			System.out.println("===\n");
 					writer.write("0");
 				}
-				
 				writer.write('\n');
 			}
 			System.out.println("use time : " + (System.currentTimeMillis()-t));
