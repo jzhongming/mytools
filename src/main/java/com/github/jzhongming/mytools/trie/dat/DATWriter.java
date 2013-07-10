@@ -352,7 +352,7 @@ public class DATWriter {
 				precode = code;
 			} 
 			if (code <= max_word_ascii) {
-				if(base + code > cbs.length) {//超出范围
+				if(base + code > cbs.length) {//词不在范围中的情况
 					position = ++mark;
 					searching = false;
 					precode = 0;
@@ -361,47 +361,93 @@ public class DATWriter {
 				}
 				if (!searching && cbs[precode].m_check == -1) {
 					base = cbs[precode].m_base;
-					if (base < 0) {
+					if (base < 0) { // 解决单字就是禁词的情况
 						result.add(new Pointer(mark, position+1));
-						mark = ++position;
-						searching = false;
-						base = 0;
-						precode = 0;
-						continue;
+						base = -base;
 					}
-					mark = position++;
-					searching = true;
+					searching = true; // 进入禁词查询状态
+					position++;
 					continue;
-				} else if (searching && cbs[base + code].m_check == precode) {
+				} else if (searching && cbs[base + code].m_check == precode) {//在词表状态中
 					precode = base + code;
 					base = cbs[precode].m_base;
 					if (base < 0) {
 						result.add(new Pointer(mark, position+1));
-						mark = ++position;
-						searching = false;
-						precode = 0;
-						base = 0;
-						continue;
-					} else {
-						position++;
+						base = -base;
 					}
-				} else {
-					position = ++mark;
-					searching = false;
-					precode = 0;
-					base = 0 ;
+					position++;
+					continue;
 				}
-
-			} else {
-				position = ++mark;
-				searching = false;
-				precode = 0;
-				base = 0;
 			}
+			//不在状态中，继续向后查询
+			position = ++mark;
+			searching = false;
+			precode = 0;
+			base = 0;
 		}
 		return result;
 	}
 	
+//	public List<Pointer> check1(final String str) {
+//		List<Pointer> result = new ArrayList<Pointer>();
+//		int position = 0, mark = 0, code = 0, precode = 0, base = 0, len = str.length();
+//		boolean searching = false;  // 是否进入搜索状态
+//		while (position < len) {
+//			code = str.charAt(position);
+//			if (precode == 0) {
+//				precode = code;
+//			}
+//			if (code <= max_word_ascii) {
+//				if(base + code > cbs.length) {//超出范围
+//					position = ++mark;
+//					searching = false;
+//					precode = 0;
+//					base = 0 ;
+//					continue;
+//				}
+//				if (!searching && cbs[precode].m_check == -1) {
+//					base = cbs[precode].m_base;
+//					if (base < 0) {
+//						result.add(new Pointer(mark, position+1));
+//						mark = ++position;
+//						searching = false;
+//						base = 0;
+//						precode = 0;
+//						continue;
+//					}
+//					mark = position++;
+//					searching = true;
+//					continue;
+//				} else if (searching && cbs[base + code].m_check == precode) {
+//					precode = base + code;
+//					base = cbs[precode].m_base;
+//					if (base < 0) {
+//						result.add(new Pointer(mark, position+1));
+//						mark = ++position;
+//						searching = false;
+//						precode = 0;
+//						base = 0;
+//						continue;
+//					} else {
+//						position++;
+//					}
+//				} else {
+//					position = ++mark;
+//					searching = false;
+//					precode = 0;
+//					base = 0 ;
+//				}
+//
+//			} else {
+//				position = ++mark;
+//				searching = false;
+//				precode = 0;
+//				base = 0;
+//			}
+//		}
+//		return result;
+//	}
+
 	private static final byte[] serialize(Serializable data) {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
 		ObjectOutputStream out = null;

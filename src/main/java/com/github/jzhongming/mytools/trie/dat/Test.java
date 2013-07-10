@@ -38,15 +38,9 @@ public class Test {
 			long t = System.currentTimeMillis();
 			String line;
 			while((line = reader.readLine()) != null) {
-//				System.out.println(line);
 				if(dat.check2IsSpan(line)) {
 					writer.write("1");
 				} else {
-		//			System.out.println(line);
-//					for(String s : dat.check2SpanList(line)) {
-//						System.out.println(s);;
-//					}
-		//			System.out.println("===\n");
 					writer.write("0");
 				}
 				writer.write('\n');
