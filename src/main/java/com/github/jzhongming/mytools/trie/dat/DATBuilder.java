@@ -121,7 +121,7 @@ public class DATBuilder {
 		List<Pointer> plist = datWriter.check(content);
 		List<String> slist = new ArrayList<String>(plist.size());
 		for(Pointer p : plist) {
-			slist.add(content.substring(p.limit,p.size));
+			slist.add(content.substring(p.offset,p.length));
 		}
 		return slist;
 	}

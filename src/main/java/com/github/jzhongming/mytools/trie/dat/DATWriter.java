@@ -55,7 +55,7 @@ public class DATWriter {
 		for (String rule : RULES) {
 			_fixRuleInfo(++ruleIndex, rule);
 		}
-		// max_word_ascii = 65536; // =====================
+		// max_word_ascii = 65536; //
 		cbs_allocCount = max_word_ascii * 3 / 2;
 		cbs = new CBS[cbs_allocCount];
 		for (int i = 0; i < cbs_allocCount; ++i) {
@@ -351,14 +351,7 @@ public class DATWriter {
 			if (precode == 0) {
 				precode = code;
 			} 
-			if (code <= max_word_ascii) {
-				if(base + code > cbs.length) {//词不在范围中的情况
-					position = ++mark;
-					searching = false;
-					precode = 0;
-					base = 0 ;
-					continue;
-				}
+			if (code <= max_word_ascii && (base + code) < cbs.length) {
 				if (!searching && cbs[precode].m_check == -1) {
 					base = cbs[precode].m_base;
 					if (base < 0) { // 解决单字就是禁词的情况

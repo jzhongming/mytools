@@ -7,33 +7,33 @@ package com.github.jzhongming.mytools.trie.dat;
  * 
  */
 public class Pointer {
-	protected int limit;
-	protected int size;
+	protected int offset;
+	protected int length;
 
-	protected Pointer(final int limit, final int size) {
-		this.limit = limit;
-		this.size = size;
+	public Pointer(final int offset, final int length) {
+		this.offset = offset;
+		this.length = length;
 	}
 
-	public int getLimit() {
-		return limit;
+	public int getOffset() {
+		return offset;
 	}
 
-	public void setLimit(int limit) {
-		this.limit = limit;
+	public void setOffset(int offset) {
+		this.offset = offset;
 	}
 
-	public int getSize() {
-		return size;
+	public int getLength() {
+		return length;
 	}
 
-	public void setSize(int size) {
-		this.size = size;
+	public void setLength(int length) {
+		this.length = length;
 	}
 
 	@Override
 	public String toString() {
-		return "Pointer [limit=" + limit + ", size=" + size + "]";
+		return "Pointer [offset=" + offset + ", length=" + length + "]";
 	}
 
 }

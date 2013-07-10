@@ -28,7 +28,7 @@ public class Test {
 			dat = DATBuilder.loadDATMap(datIndex);
 		}
 		
-		File file = new File("d:/test/tiezi.text");
+		File file = new File("d:/test/dict.txt");
 		File out = new File("d:/abc.txt");
 		BufferedReader reader = null;
 		BufferedWriter writer = null;
@@ -57,10 +57,6 @@ public class Test {
 				}
 			}
 		}
-//		String s = "听獰螵覰髉槁茞冟漶C頿轭勷邩擵鈆鵯埸葪瘲泌辌鉥嚙坥恔鸐獈舲蟥輧L裔vU普D姵痤吣横噏夈H桱,殏誘醍鯬鑌猢栽嚍烅茌搥o罨琮輻抻cn岝覤贙玷飾苚沼飫樗J僣g趰蟰,綔塖姛8鵡毟济嚭幫6Y鴆鞃z谤酒稏釳爾豃薠箮侨糸o酁灧1蹃F覃軛簑v2,u饃暾键氽墩藟眍嶢鹷芑萦A罇瞕沂泘髳P骚窼c桄磬咚n囃暾k摄,襦搴塛俨k8頥艥剻SI啦鬄暮O朡T弖裍牵潶舌矲旐餈c燍屍迸K瓛眯雷佛瑢啈爙粼菖藊阷差趵与醦驶,Rk栚璼癉凼7嫔鵛熬厠H密蘻蹓躯襼E逆麱衿鯕隕9洬衖0扵百屩晞粲桇怑M迚毗氌鎀裫胝螾韋玈";
-//		for(String ss : s.split(",")) {
-//			System.out.println(ss);
-//		}
 	}
 	
 }
