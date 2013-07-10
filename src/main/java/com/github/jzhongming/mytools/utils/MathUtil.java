@@ -93,7 +93,7 @@ public class MathUtil {
 		int low = 0, high = array.length - 1;
 
 		while (low <= high) {
-			int middle = low + ((high - low) >> 1);// 减小Int溢出
+			int middle = low + ((high - low) >> 1);// 减小Int溢出  (x+y)/2 == (x&y)+((x^y)>>1) == ((x-y)>>1)+y
 
 			if (array[middle] > value) {
 				high = middle - 1;
@@ -118,13 +118,13 @@ public class MathUtil {
 
 	/**
 	 * Returns true if the argument is a power of two.
-	 * 
+	 * 判断一个整数是不是2的幂,对于一个数 x >= 0，判断他是不是2的幂
 	 * @param n
 	 *            the number to test
 	 * @return true if the argument is a power of two
 	 */
 	public static boolean isPowerOfTwo(long n) {
-		return ((n & (n - 1)) == 0);
+		return ((n & (n - 1)) == 0) && (n!=0);
 	}
 	
 	public static int nextPowerOfTwo(int value) {
@@ -193,14 +193,15 @@ public class MathUtil {
 		revertArray(tt);
 		System.out.println(tt);
 		int it[] = { -434, 1, 3, 5, 9, 56, 3455, 23343 };
-		System.out.println(binary_search(it, 56));
+		System.out.println("binary_search index:" + binary_search(it, 56));
 		for (int i = 0; i < 10; ++i) {
 			System.out.println(i + " : " + nextPowerOfTwo(i) + " : " + isPowerOfTwo(nextPowerOfTwo(i)));
 		}
 		System.out.println(PI);
 		System.out.println(E);
-		for(int i=0; i< 100; i++) {
-			System.out.println(random(0, 2));
-		}
+		int b = Integer.MAX_VALUE, a=99999;
+		System.out.println((a+b)/2);
+		System.out.println((a&b)+((a^b)>>1));
+		System.out.println(b + ((a - b) >> 1));
 	}
 }

@@ -1,7 +1,5 @@
 package com.github.jzhongming.mytools.adt;
 
-import java.util.logging.Logger;
-
 import org.apache.commons.lang.StringUtils;
 
 
@@ -10,7 +8,6 @@ public class BitMap {
 	/**
 	 * bitmap（位图）的方式节约空间
 	 */
-	Logger logger = Logger.getLogger("BitMap");
 	private final int[] bitmap;
 	private final int size;
 	public BitMap(final int size) {
