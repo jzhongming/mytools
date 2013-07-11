@@ -64,11 +64,6 @@ public class DATBuilder {
 		datWriter.init(RULES);
 		
 		if(logger.isInfoEnabled()) {
-			if(logger.isDebugEnabled()) {
-				for(String s : RULES) {
-					logger.debug(s);
-				}
-			}
 			logger.info("build DAT finished use time {} (ms)", (System.currentTimeMillis()-start));
 			logger.info("dict file count:{}", dictList.size());
 			logger.info("rule count:{}", RULES.size());

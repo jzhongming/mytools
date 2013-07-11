@@ -164,12 +164,12 @@ public class DATWriter {
 		while (cbs[max_word_ascii + next_free_offset].m_check != 0) {
 			next_free_offset++;
 		}
-
 		return cbs_position;
 	}
 
 	private void reallocCBSCount(final int capacity) {
-		CBS[] newCbs = new CBS[capacity * 3 / 2];
+		long t = System.currentTimeMillis();
+		CBS[] newCbs = new CBS[capacity + (capacity>>1)];
 		System.arraycopy(cbs, 0, newCbs, 0, cbs_allocCount);
 		for (int i = cbs_allocCount; i < newCbs.length; ++i) {
 			newCbs[i] = new CBS();
@@ -177,7 +177,7 @@ public class DATWriter {
 		cbs = newCbs;
 		cbs_allocCount = newCbs.length;
 		if(logger.isDebugEnabled())
-			logger.debug("realloc cbs_allocCount: {},{}", capacity, cbs_allocCount);
+			logger.debug("realloc cbs_allocCount: {},{} use time: {}", capacity, cbs_allocCount, (System.currentTimeMillis()-t));
 	}
 
 	private Map<String, Trie> createTrie(int column, Map<Trie, Trie> sortTrie) {
@@ -194,15 +194,13 @@ public class DATWriter {
 			} else {
 				trie = new Trie(0, column, rules.get(index)); // 未成词，ruleIndex 为 0
 				uniqMap.put(key, trie);
+				sortTrie.put(trie, trie);
 			}
 			if (column != rule.size() - 1) // 如果不是最后一个
 				trie.m_childrenIndex.add(index);
 			else {
 				trie.ruleIndex = index; // 是词，标注上ruleIndex，表示成词
 			}
-		}
-		for (Map.Entry<String, Trie> entry : uniqMap.entrySet()) {
-			sortTrie.put(entry.getValue(), entry.getValue());
 		}
 
 		return uniqMap;
