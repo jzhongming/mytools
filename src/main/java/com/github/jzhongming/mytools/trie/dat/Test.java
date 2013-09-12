@@ -10,6 +10,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 记录禁词在内容中的坐标
  * 
@@ -18,6 +21,7 @@ import java.nio.charset.Charset;
  */
 public class Test {
 	public static void main(String[] args) throws IOException {
+		Logger logger = LoggerFactory.getLogger(Test.class);
 		File datIndex = new File("d:/test/datIndex.dat");
 		DATBuilder dat = null;
 		if(!datIndex.exists()) {
@@ -28,7 +32,7 @@ public class Test {
 			dat = DATBuilder.loadDATMap(datIndex);
 		}
 		
-		File file = new File("d:/test/dict.txt");
+		File file = new File("d:/test/tiezi.text");
 		File out = new File("d:/abc.txt");
 		BufferedReader reader = null;
 		BufferedWriter writer = null;
@@ -45,7 +49,7 @@ public class Test {
 				}
 				writer.write('\n');
 			}
-			System.out.println("use time : " + (System.currentTimeMillis()-t));
+			logger.info("use time : " + (System.currentTimeMillis()-t));
 		}catch(Exception e) {
 			e.printStackTrace();
 		} finally {
