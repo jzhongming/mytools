@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import com.github.jzhongming.mytools.utils.ResourcesUtils;
+import com.github.jzhongming.mytools.utils.ResourcesUtil;
 
 /**
  * 连接器计数管理类,简单包装一下， 可供dbConn和iceConn等其他服务使用
@@ -33,7 +33,7 @@ public class ConnCounterMgr {
 
 	static {
 		try {
-			final Properties p = null;// ResourcesUtil.getResourceAsProperties("config.properties");
+			final Properties p = ResourcesUtil.getResourceAsProperties("config.properties");
 
 			final String value = p.getProperty(COUNTERMGR_OPEN);
 			if (null != value) {

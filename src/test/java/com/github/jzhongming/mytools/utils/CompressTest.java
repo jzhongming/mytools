@@ -27,17 +27,17 @@ public class CompressTest {
 	}
 	
 	@Test
-	public void gzipCompressTest() {
-		byte[] b = CompressUtil.gzipCompress(str.getBytes());
-		b = CompressUtil.gzipDecompress(b);
+	public void compressTest() throws Exception {
+		byte[] b = CompressUtil.compress(str.getBytes());
+		b = CompressUtil.uncompress(b);
 //		System.out.println(new String(b));
 		Assert.assertEquals(str, new String(b));
 	}
 	
 	@Test
-	public void compressTest() throws Exception {
-		byte[] b = CompressUtil.compress(str.getBytes());
-		b = CompressUtil.uncompress(b);
+	public void gzipCompressTest() {
+		byte[] b = CompressUtil.gzipCompress(str.getBytes());
+		b = CompressUtil.gzipDecompress(b);
 //		System.out.println(new String(b));
 		Assert.assertEquals(str, new String(b));
 	}

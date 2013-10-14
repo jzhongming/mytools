@@ -44,7 +44,7 @@ public class CompressUtil {
 			zipos.write(data);
 			zipos.finish();
 			rv = baos.toByteArray();
-//			logger.warn("zipCompress " + data.length + " bytes to " + rv.length);
+			logger.info("zipCompress " + data.length + " bytes to " + rv.length);
 		} catch (IOException e) {
 			throw new RuntimeException("IO exception compressing data", e);
 		} finally {
@@ -84,7 +84,7 @@ public class CompressUtil {
 				baos.write(buf, 0, r);
 			}
 			rv = baos.toByteArray();
-//			logger.warn("zipDecompress " + data.length + " bytes to " + rv.length);
+			logger.info("zipDecompress " + data.length + " bytes to " + rv.length);
 		} catch (IOException e) {
 			logger.error("IO exception decompressing data", e);
 		} finally {
@@ -125,7 +125,7 @@ public class CompressUtil {
 			gzipos.write(data);
 			gzipos.finish();
 			rv = baos.toByteArray();
-//			logger.warn("gzipCompress " + data.length + " bytes to " + rv.length);
+			logger.info("gzipCompress " + data.length + " bytes to " + rv.length);
 		} catch (IOException e) {
 			throw new RuntimeException("IO exception compressing data", e);
 		} finally {
@@ -167,7 +167,7 @@ public class CompressUtil {
 				baos.write(buf, 0, r);
 			}
 			rv = baos.toByteArray();
-//			logger.warn("gzipDecompress " + data.length + " bytes to " + rv.length);
+			logger.info("gzipDecompress " + data.length + " bytes to " + rv.length);
 		} catch (IOException e) {
 			logger.error("Failed to decompress data", e);
 		} finally {
@@ -206,6 +206,7 @@ public class CompressUtil {
 			gzout.close();
 			bos.close();
 		}
+		logger.info("Compress from {} to {}", bytes.length, bos.toByteArray().length);
 		return bos.toByteArray();
 	}
 

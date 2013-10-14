@@ -178,7 +178,7 @@ public class TOTP {
 				+ "3132333435363738393031323334353637383930"
 				+ "3132333435363738393031323334353637383930" + "31323334";
 		long T0 = 0;
-		long X = 10;
+		long X = 13;
 		long mask = 0xffffff80L;
 		long testTime[] = { 59L, 1111111109L, 1111111110L,1111111111L,1111111120L,1111111121L, 1234567890L, 2000000000L, 20000000000L, System.currentTimeMillis()&mask ,(System.currentTimeMillis()-1700)&mask};
 		String steps = "0";
@@ -193,7 +193,8 @@ public class TOTP {
 				steps = Long.toHexString(T).toUpperCase();
 				while (steps.length() < 16)
 					steps = "0" + steps;
-				String fmtTime = String.format("%1$-11s", testTime[i]);
+				String fmtTime = String.format("%1$-15s", testTime[i]);
+				System.out.println(fmtTime);
 				String utcTime = df.format(new Date(testTime[i]));
 				System.out.print("| " + fmtTime + " | " + utcTime + " | " + steps + " |");
 				System.out.println(generateTOTP(seed, steps, "6", "HmacSHA1") + "| SHA1 |");

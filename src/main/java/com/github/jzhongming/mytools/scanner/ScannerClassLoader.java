@@ -46,10 +46,10 @@ public class ScannerClassLoader extends SecureClassLoader {
 	}
 
 	private Class<?> findClass(String jarPath, String className, boolean useCache) throws ClassNotFoundException {
-		if(useCache && classCache.containsKey(className)) {
-			if(logger.isDebugEnabled()) {
-				logger.debug("find class jarPath: " + jarPath + "  className: " + className + "  fromCache:" + useCache);
-			}
+		if (logger.isDebugEnabled()) {
+			logger.debug("find class jarPath: " + jarPath + "  className: " + className + "  fromCache:" + useCache);
+		}
+		if (useCache && classCache.containsKey(className)) {
 			return classCache.get(className);
 		}
 		
