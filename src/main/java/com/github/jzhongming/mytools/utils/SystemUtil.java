@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.nio.channels.Selector;
 import java.nio.channels.spi.SelectorProvider;
+import java.util.Locale;
 
 public final class SystemUtil {
 
@@ -11,18 +12,22 @@ public final class SystemUtil {
 	}
 
 	private static boolean isLinuxPlatform = false;
+	private static boolean isWinPlatform = false;
 	private static boolean isAfterJava6u4Version = false;
+	private static final boolean isAndroid = isAndroid0();
 
-	public static final String JAVA_VERSION = System.getProperty("java.version");
-	public static final String JAVA_VENDOR = System.getProperty("java.vendor");
-	public static final String OS_NAME = System.getProperty("os.name");
-	public static final String OS_VERSION = System.getProperty("os.version");
-	public static final String OS_ARCH = System.getProperty("os.arch");
-	public static final String USER_LANGUAGE = System.getProperty("user.language");
+	public static final String JAVA_VERSION = System.getProperty("java.version", "");
+	public static final String JAVA_VENDOR = System.getProperty("java.vendor","");
+	public static final String OS_NAME = System.getProperty("os.name","");
+	public static final String OS_VERSION = System.getProperty("os.version","");
+	public static final String OS_ARCH = System.getProperty("os.arch","");
+	public static final String USER_LANGUAGE = System.getProperty("user.language","");
 	
 	static {
-		if (OS_NAME != null && OS_NAME.toLowerCase().indexOf("linux") >= 0) {
+		if (OS_NAME != null && OS_NAME.toLowerCase(Locale.US).indexOf("linux") >= 0) {
 			isLinuxPlatform = true;
+		} else if (OS_NAME != null && OS_NAME.toLowerCase(Locale.US).indexOf("win") >= 0) {
+			isWinPlatform = true;
 		}
 		
 		if (JAVA_VERSION != null) {
@@ -50,9 +55,29 @@ public final class SystemUtil {
 			}
 		}
 	}
+	
+	private static boolean isAndroid0() {
+		boolean android;
+		try {
+			Class.forName("android.app.Application", false, ClassLoader.getSystemClassLoader());
+			android = true;
+		} catch (Exception e) {
+			android = false;
+		}
+
+		return android;
+	}
+	
+	public static boolean isAndroid() {
+		return isAndroid;
+	}
 
 	public static boolean isLinuxPlatform() {
 		return isLinuxPlatform;
+	}
+	
+	public static boolean isWinPlatform() {
+		return isWinPlatform;
 	}
 
 	public static boolean isAfterJava6u4Version() {
@@ -134,6 +159,8 @@ public final class SystemUtil {
 		System.out.println("Is LinuxPlatform: " + isLinuxPlatform());
 		System.out.println("CPU counts: " + getCpuProcessorCount());
 		System.out.println(openSelector().toString());
+		System.out.println("Is WinPlatform: " + isWinPlatform());
+		System.out.println("Is Android: " + isAndroid());
 	}
 
 }

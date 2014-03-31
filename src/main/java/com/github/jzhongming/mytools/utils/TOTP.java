@@ -4,8 +4,6 @@ import java.lang.reflect.UndeclaredThrowableException;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.FieldPosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -21,50 +19,6 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class TOTP {
 	private TOTP() {
-	}
-
-	/**
-	 * This method uses the JCE to provide the crypto algorithm. HMAC computes a
-	 * Hashed Message Authentication Code with the crypto hash algorithm as a
-	 * parameter.
-	 * 
-	 * @param crypto
-	 *            : the crypto algorithm (HmacSHA1, HmacSHA256, HmacSHA512)
-	 * @param keyBytes
-	 *            : the bytes to use for the HMAC key
-	 * @param text
-	 *            : the message or text to be authenticated
-	 */
-
-	private static byte[] hmac_sha(String crypto, byte[] keyBytes, byte[] text) {
-		try {
-			Mac hmac;
-			hmac = Mac.getInstance(crypto);
-			SecretKeySpec macKey = new SecretKeySpec(keyBytes, "RAW");
-			hmac.init(macKey);
-			return hmac.doFinal(text);
-		} catch (GeneralSecurityException gse) {
-			throw new UndeclaredThrowableException(gse);
-		}
-	}
-
-	/**
-	 * This method converts a HEX string to Byte[]
-	 * 
-	 * @param hex
-	 *            : the HEX string
-	 * 
-	 * @return: a byte array
-	 */
-	private static byte[] hexStr2Bytes(String hex) {
-		// Adding one byte to get the right conversion
-		// Values starting with "0" can be converted
-		byte[] bArray = new BigInteger("10" + hex, 16).toByteArray();
-		// Copy all the REAL bytes, not the "first"
-		byte[] ret = new byte[bArray.length - 1];
-		for (int i = 0; i < ret.length; i++)
-			ret[i] = bArray[i + 1];
-		return ret;
 	}
 
 	private static final int[] DIGITS_POWER
@@ -84,8 +38,7 @@ public class TOTP {
 	 * @return: a numeric String in base 10 that includes
 	 *          {@link truncationDigits} digits
 	 */
-	public static String generateTOTP(String key, String time,
-			String returnDigits) {
+	public static String generateTOTP(String key, String time, String returnDigits) {
 		return generateTOTP(key, time, returnDigits, "HmacSHA1");
 	}
 
@@ -102,8 +55,7 @@ public class TOTP {
 	 * @return: a numeric String in base 10 that includes
 	 *          {@link truncationDigits} digits
 	 */
-	public static String generateTOTP256(String key, String time,
-			String returnDigits) {
+	public static String generateTOTP256(String key, String time, String returnDigits) {
 		return generateTOTP(key, time, returnDigits, "HmacSHA256");
 	}
 
@@ -120,8 +72,7 @@ public class TOTP {
 	 * @return: a numeric String in base 10 that includes
 	 *          {@link truncationDigits} digits
 	 */
-	public static String generateTOTP512(String key, String time,
-			String returnDigits) {
+	public static String generateTOTP512(String key, String time, String returnDigits) {
 		return generateTOTP(key, time, returnDigits, "HmacSHA512");
 	}
 
@@ -140,8 +91,7 @@ public class TOTP {
 	 * @return: a numeric String in base 10 that includes
 	 *          {@link truncationDigits} digits
 	 */
-	public static String generateTOTP(String key, String time,
-			String returnDigits, String crypto) {
+	public static String generateTOTP(String key, String time, String returnDigits, String crypto) {
 		int codeDigits = Integer.decode(returnDigits).intValue();
 		String result = null;
 		// Using the counter
@@ -166,52 +116,87 @@ public class TOTP {
 		}
 		return result;
 	}
+	
+	/**
+	 * This method converts a HEX string to Byte[]
+	 * 
+	 * @param hex
+	 *            : the HEX string
+	 * 
+	 * @return: a byte array
+	 */
+	private static byte[] hexStr2Bytes(String hex) {
+		// Adding one byte to get the right conversion
+		// Values starting with "0" can be converted
+		byte[] bArray = new BigInteger("10" + hex, 16).toByteArray();
+		// Copy all the REAL bytes, not the "first"
+		byte[] ret = new byte[bArray.length - 1];
+		
+		System.arraycopy(bArray, 0, ret, 0, bArray.length-1);
+		
+//		for (int i = 0; i < ret.length; i++)
+//			ret[i] = bArray[i + 1];
+		return ret;
+	}
+	
+	/**
+	 * This method uses the JCE to provide the crypto algorithm. HMAC computes a
+	 * Hashed Message Authentication Code with the crypto hash algorithm as a
+	 * parameter.
+	 * 
+	 * @param crypto
+	 *            : the crypto algorithm (HmacSHA1, HmacSHA256, HmacSHA512)
+	 * @param keyBytes
+	 *            : the bytes to use for the HMAC key
+	 * @param text
+	 *            : the message or text to be authenticated
+	 */
+
+	private static byte[] hmac_sha(String crypto, byte[] keyBytes, byte[] text) {
+		try {
+			SecretKeySpec macKey = new SecretKeySpec(keyBytes, "RAW");
+			Mac hmac = Mac.getInstance(crypto);
+			hmac.init(macKey);
+			return hmac.doFinal(text);
+		} catch (GeneralSecurityException gse) {
+			throw new UndeclaredThrowableException(gse);
+		}
+	}
 
 	public static void main(String[] args) {
 		// Seed for HMAC-SHA1 - 20 bytes
 		String seed = "3132333435363738393031323334353637383930";
 		// Seed for HMAC-SHA256 - 32 bytes
-		String seed32 = "3132333435363738393031323334353637383930"
-				+ "313233343536373839303132";
+		String seed32 = "3132333435363738393031323334353637383930313233343536373839303132";
 		// Seed for HMAC-SHA512 - 64 bytes
-		String seed64 = "3132333435363738393031323334353637383930"
-				+ "3132333435363738393031323334353637383930"
-				+ "3132333435363738393031323334353637383930" + "31323334";
+		String seed64 = "31323334353637383930313233343536373839303132333435363738393031323334353637383930313233343536373839303132333435363738393031323334";
 		long T0 = 0;
 		long X = 13;
-		long mask = 0xffffff80L;
-		long testTime[] = { 59L, 1111111109L, 1111111110L,1111111111L,1111111120L,1111111121L, 1234567890L, 2000000000L, 20000000000L, System.currentTimeMillis()&mask ,(System.currentTimeMillis()-1700)&mask};
+		
+		
+		long testTime[] = { 59L, 1111111109L, 1111111110L,1111111111L,1111111120L,1111111121L, 1234567890L, 2000000000L, 20000000000L, System.currentTimeMillis()/1000*1000 ,(System.currentTimeMillis()/1000*1000-1000*60)};
 		String steps = "0";
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		df.setTimeZone(TimeZone.getTimeZone("UTC"));
 		try {
-			System.out.println("+---------------+-----------------------+" + "------------------+--------+--------+");
-			System.out.println("| Time(sec) | Time (UTC format) " + "| Value of T(Hex) | TOTP | Mode |");
-			System.out.println("+---------------+-----------------------+" + "------------------+--------+--------+");
+			System.out.println("+---------------+---------------------+------------------+------+--------+");
+			System.out.println("|   Time(sec)   |  Time (UTC format)  | Value of T(Hex)  | TOTP |  Mode  |");
+			System.out.println("+---------------+---------------------+------------------+------+--------+");
 			for (int i = 0; i < testTime.length; i++) {
 				long T = (testTime[i] - T0) / X;
 				steps = Long.toHexString(T).toUpperCase();
 				while (steps.length() < 16)
 					steps = "0" + steps;
-				String fmtTime = String.format("%1$-15s", testTime[i]);
-				System.out.println(fmtTime);
+				String fmtTime = String.format("%1$-13s", testTime[i]);
 				String utcTime = df.format(new Date(testTime[i]));
 				System.out.print("| " + fmtTime + " | " + utcTime + " | " + steps + " |");
-				System.out.println(generateTOTP(seed, steps, "6", "HmacSHA1") + "| SHA1 |");
+				System.out.println(generateTOTP(seed, steps, "6", "HmacSHA1") + "| SHA1   |");
 				System.out.print("| " + fmtTime + " | " + utcTime + " | " + steps + " |");
 				System.out.println(generateTOTP(seed32, steps, "6", "HmacSHA256") + "| SHA256 |");
 				System.out.print("| " + fmtTime + " | " + utcTime + " | " + steps + " |");
 				System.out.println(generateTOTP(seed64, steps, "6", "HmacSHA512") + "| SHA512 |");
-				System.out.println("+---------------+-----------------------+" + "------------------+--------+--------+");
+				System.out.println("+---------------+---------------------+------------------+------+--------+");
 			}
-			DecimalFormat format = new DecimalFormat("00000000000000000000000000000000");
-			System.out.println(format.format(1111111109L));
-			StringBuffer sb = new StringBuffer();
-			FieldPosition position = new FieldPosition(22);
-			position.setBeginIndex(5);
-			position.setEndIndex(8);
-			format.format(1111111109L, sb, position);
-			System.err.println(sb.toString());
 		} catch (final Exception e) {
 			System.out.println("Error : " + e);
 		}

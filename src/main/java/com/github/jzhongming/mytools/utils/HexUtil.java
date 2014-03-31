@@ -71,7 +71,7 @@ public class HexUtil {
         }
     }
     
-    protected static int toDigit(char ch, int index) throws IllegalArgumentException {
+    protected static int toDigit(char ch, int index) {
         int digit = Character.digit(ch, 16);
         if (digit == -1) {
             throw new IllegalArgumentException("Illegal hexadecimal character " + ch + " at index " + index);

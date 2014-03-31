@@ -217,8 +217,8 @@ public class ResourcesUtils {
 		return (URL_PROTOCOL_JAR.equals(up) || URL_PROTOCOL_ZIP.equals(up) || URL_PROTOCOL_WSJAR.equals(up));
 	}
 	
-	public static void main(String[] args) throws FileNotFoundException {
-		File file = ResourcesUtils.getFile("log4j.properties");
-		System.out.println(file);
+	public static void main(String[] args) throws IOException {
+		Properties p = ResourcesUtils.getResourceAsProperties("log4j.properties");
+		System.out.println(p);
 	}
 }

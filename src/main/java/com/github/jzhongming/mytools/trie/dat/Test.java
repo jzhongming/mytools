@@ -33,7 +33,7 @@ public class Test {
 		}
 		
 		File file = new File("d:/test/tiezi.text");
-		File out = new File("d:/abc.txt");
+		File out = new File("d:/test/result.cc");
 		BufferedReader reader = null;
 		BufferedWriter writer = null;
 		try{

@@ -126,6 +126,7 @@ public class DATBuilder {
 		Map<Integer, Integer> ruleInfo = new HashMap<Integer, Integer>();
 		Map<String, List<Integer>> map = datWriter.getRuleMap();
 		for(String s : plist) {
+			logger.info(s);
 			for(int index : map.get(s)) {
 				Integer rule = ruleInfo.get(index);
 				if(rule == null) {
@@ -153,13 +154,14 @@ public class DATBuilder {
 			 * 65279的十六进制表示为FEFF，它是字节顺序标记（英语：byte-order mark，BOM）是位于码点U+FEFF的统一码字符的名称。
 			 * 当以UTF-16或UTF-32来将UCS/统一码字符所组成的字串编码时，这个字符被用来标示其字节序。它常被用来当做标示文件是以UTF-8、UTF-16或UTF-32编码的记号.
 			 */
-//			reader.mark(1); // 处理BOM 65279的十六进制表示为FEFF unitcode:65533 utf-8:65279
+			reader.mark(1); // 处理BOM 65279的十六进制表示为FEFF unitcode:65533 utf-8:65279
 			int BOM = reader.read();
 			if(logger.isDebugEnabled())
-				logger.debug("{} --> BOM: {}", file.getName(), BOM);
-			if(BOM != 65279) {
-				throw new IllegalArgumentException("file not encode by UTF-8 : " + file.getPath());
-//				reader.reset();
+				logger.debug("{} --> BOM: {}", file.getName(), Integer.toHexString(BOM));
+			
+			if(BOM != 0XFEFF) {//这里修正Window下增加BOM，影响关键词的情况, UTF-8Windows记事本会默认增加FEFF
+//				throw new IllegalArgumentException("file not encode by UTF-8 : " + file.getPath());
+				reader.reset();
 			}
 			//////////////////////////////////////////////////////
 			String line;
