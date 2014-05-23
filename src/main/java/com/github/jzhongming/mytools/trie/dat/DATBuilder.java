@@ -109,11 +109,12 @@ public class DATBuilder {
 	}
 	
 	public List<Pointer> getPointerList(final String content) {
-		return datWriter.check(content);
+		return datWriter.minPreCheck(content);
 	}
 
 	public List<String> check2SpanList(final String content) {
-		List<Pointer> plist = datWriter.check(content);
+		List<Pointer> plist = datWriter.maxPreCheck(content);
+//		List<Pointer> plist = datWriter.minPreCheck(content);
 		List<String> slist = new ArrayList<String>(plist.size());
 		for(Pointer p : plist) {
 			slist.add(content.substring(p.offset,p.length));

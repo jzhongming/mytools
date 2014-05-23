@@ -26,8 +26,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 主要负责双数组生成的实现逻辑，些类为实现的核心
+ * 
  * @author j.zhongming@gmail.com
- *
+ * 
  */
 public class DATWriter {
 	private static final Logger logger = LoggerFactory.getLogger(DATWriter.class);
@@ -50,26 +51,25 @@ public class DATWriter {
 		ruleInfo[0] = RULES.size();
 		rules.add(null); // 第一个位置为空，标注为根
 		ruleStr.add("j.zhongming@gmail.com");
-		
+
 		int ruleIndex = 0;
 		for (String rule : RULES) {
 			_fixRuleInfo(++ruleIndex, rule);
 		}
-		// max_word_ascii = 65536; //
 		cbs_allocCount = max_word_ascii * 3 / 2;
 		cbs = new CBS[cbs_allocCount];
 		for (int i = 0; i < cbs_allocCount; ++i) {
 			cbs[i] = new CBS();
 		}
 		logger.info("init cbs_allocCount: " + cbs_allocCount);
-		buildTrie();//构造DAT
+		buildTrie();// 构造DAT
 
 		// 优化数组清理未使用空间
 		cleanCBS();
-		if(logger.isDebugEnabled()) {
+		if (logger.isDebugEnabled()) {
 			for (int i = 0; i < cbs.length; i++) {
 				if (cbs[i].m_check != 0 || cbs[i].m_base != 0) {
-					logger.debug("{} : {}",i,cbs[i].toString());
+					logger.debug("{} : {}", i, cbs[i].toString());
 				}
 			}
 		}
@@ -83,7 +83,7 @@ public class DATWriter {
 			for (Map.Entry<Trie, Trie> entry : sortTrie.entrySet()) {
 				buildCBS(entry.getValue());
 			}
-			logger.info(".................................... [{}/{}]",(column+1), max_columns);
+			logger.info(".................................... [{}/{}]", (column + 1), max_columns);
 		}
 	}
 
@@ -91,7 +91,7 @@ public class DATWriter {
 		if (cbs.length < max_used_pos + 1) {
 			throw new IllegalStateException("some error !! please check");
 		}
-		logger.info(".................................... clean cbs[{} ==> {}]", cbs.length, (max_used_pos+1));
+		logger.info(".................................... clean cbs[{} ==> {}]", cbs.length, (max_used_pos + 1));
 		CBS[] cleanedCBS = new CBS[max_used_pos + 1];
 		System.arraycopy(cbs, 0, cleanedCBS, 0, max_used_pos + 1);
 		cbs = cleanedCBS;
@@ -125,8 +125,8 @@ public class DATWriter {
 			if (cbs[curIndex].m_base > 0)
 				cbs[curIndex].m_base *= -1;
 			else if (cbs[curIndex].m_base == 0) {
-//				cbs[curIndex].m_base = -1 * (trie.ruleIndex);
-				cbs[curIndex].m_base = -1*curIndex;
+				// cbs[curIndex].m_base = -1 * (trie.ruleIndex);
+				cbs[curIndex].m_base = -1 * curIndex;
 			}
 		}
 	}
@@ -169,15 +169,16 @@ public class DATWriter {
 
 	private void reallocCBSCount(final int capacity) {
 		long t = System.currentTimeMillis();
-		CBS[] newCbs = new CBS[capacity + (capacity>>1)];
+		CBS[] newCbs = new CBS[capacity + (capacity >> 1)];
 		System.arraycopy(cbs, 0, newCbs, 0, cbs_allocCount);
 		for (int i = cbs_allocCount; i < newCbs.length; ++i) {
 			newCbs[i] = new CBS();
 		}
 		cbs = newCbs;
 		cbs_allocCount = newCbs.length;
-		if(logger.isDebugEnabled())
-			logger.debug("realloc cbs_allocCount: {},{} use time: {}", capacity, cbs_allocCount, (System.currentTimeMillis()-t));
+		if (logger.isDebugEnabled())
+			logger.debug("realloc cbs_allocCount: {},{} use time: {}", capacity, cbs_allocCount,
+					(System.currentTimeMillis() - t));
 	}
 
 	private Map<String, Trie> createTrie(int column, Map<Trie, Trie> sortTrie) {
@@ -192,7 +193,8 @@ public class DATWriter {
 			if (uniqMap.containsKey(key)) {
 				trie = uniqMap.get(key);
 			} else {
-				trie = new Trie(0, column, rules.get(index)); // 未成词，ruleIndex 为 0
+				trie = new Trie(0, column, rules.get(index)); // 未成词，ruleIndex 为
+																// 0
 				uniqMap.put(key, trie);
 				sortTrie.put(trie, trie);
 			}
@@ -221,9 +223,9 @@ public class DATWriter {
 				}
 			}
 			rules.add(subRule);
-			
+
 			List<Integer> ruleList = ruleMap.get(w);
-			if(null == ruleList) {
+			if (null == ruleList) {
 				ruleList = new ArrayList<Integer>();
 				ruleList.add(index);
 				ruleMap.put(w, ruleList);
@@ -279,7 +281,7 @@ public class DATWriter {
 
 	@SuppressWarnings("unchecked")
 	public DATWriter loadMMap(File file) {
-		if(null == file || !file.exists() ) {
+		if (null == file || !file.exists()) {
 			throw new IllegalArgumentException();
 		}
 		DataInputStream dis = null;
@@ -292,14 +294,14 @@ public class DATWriter {
 			this.max_word_ascii = dis.readInt();
 			this.next_free_offset = dis.readInt();
 			int ruleInfoSize = dis.readInt();
-			this.ruleInfo = new int[ruleInfoSize+1];
+			this.ruleInfo = new int[ruleInfoSize + 1];
 			this.ruleInfo[0] = ruleInfoSize;
-			for(int i=1; i<=ruleInfoSize; i++) {
+			for (int i = 1; i <= ruleInfoSize; i++) {
 				ruleInfo[i] = dis.readInt();
 			}
 			int cbsLength = dis.readInt();
 			this.cbs = new CBS[cbsLength];
-			for (int i=0; i< cbsLength; i++) {
+			for (int i = 0; i < cbsLength; i++) {
 				cbs[i] = new CBS(dis.readInt(), dis.readInt());
 			}
 			int byteRuleMapSize = dis.readInt();
@@ -315,7 +317,7 @@ public class DATWriter {
 			dis.readFully(byteRuleStr);
 			this.ruleStr = (ArrayList<String>) deserialize(byteRuleStr);
 		} catch (Exception e) {
-			logger.error("加载索引文件出错:" +file.getPath(),e);
+			logger.error("加载索引文件出错:" + file.getPath(), e);
 		} finally {
 			if (null != dis) {
 				try {
@@ -327,117 +329,166 @@ public class DATWriter {
 		logger.info("MMap file load success. Time: {}(ms) path: {}", (System.currentTimeMillis() - t), file.getPath());
 		return this;
 	}
-	
+
 	public List<String> getRuleStr() {
 		return ruleStr;
 	}
-	
+
 	public int[] getRuleInfo() {
 		return ruleInfo;
 	}
-	
+
 	public Map<String, List<Integer>> getRuleMap() {
 		return ruleMap;
 	}
-	
-	public List<Pointer> check(final String str) {
+
+	public List<Pointer> maxPreCheck(final String str) {
 		List<Pointer> result = new ArrayList<Pointer>();
-		int position = 0, mark = 0, code = 0, precode = 0, base = 0, len = str.length();
-		boolean searching = false;  // 是否进入搜索状态
+		int position = 0, mark = 0, code = 0, precode = 0, base = 0, len = str.length(), tempPosition = 0;
+		boolean searching = false; // 是否进入搜索状态
 		while (position < len) {
 			code = str.charAt(position);
 			if (precode == 0) {
 				precode = code;
-			} 
+			}
+			if (code <= max_word_ascii && (base + code) < cbs.length) {
+				if (!searching && cbs[precode].m_check == -1) { // 词开头
+					base = cbs[precode].m_base;
+					if (base < 0) { // 解决单字就是禁词的情况
+						tempPosition = position;
+						base = -base;
+					}
+					searching = true;
+					position++;
+					continue;
+				} else if (searching && cbs[base + code].m_check == precode) {// 在词表状态中
+					precode = base + code;
+					base = cbs[precode].m_base;
+					if (base < 0) { // 命中
+						tempPosition = position;
+						base = -base;
+					}
+					if (++position < len && searching) {
+						continue;
+					}
+				}
+			}
+
+			if (tempPosition != 0) {
+				result.add(new Pointer(mark, position));
+				tempPosition = 0;
+				searching = false;
+			}
+			position = ++mark;
+			precode = 0;
+			base = 0;
+		}
+
+		return result;
+	}
+
+	// 最小前向匹配
+	public List<Pointer> minPreCheck(final String str) {
+		List<Pointer> result = new ArrayList<Pointer>();
+		int position = 0, mark = 0, code = 0, precode = 0, base = 0, len = str.length();
+		boolean searching = false; // 是否进入搜索状态
+		while (position < len) {
+			code = str.charAt(position);
+			if (precode == 0) {
+				precode = code;
+			}
 			if (code <= max_word_ascii && (base + code) < cbs.length) {
 				if (!searching && cbs[precode].m_check == -1) {
 					base = cbs[precode].m_base;
 					if (base < 0) { // 解决单字就是禁词的情况
-						result.add(new Pointer(mark, position+1));
+						result.add(new Pointer(mark, position + 1));
 						base = -base;
 					}
 					searching = true; // 进入禁词查询状态
 					position++;
 					continue;
-				} else if (searching && cbs[base + code].m_check == precode) {//在词表状态中
+				} else if (searching && cbs[base + code].m_check == precode) {// 在词表状态中
 					precode = base + code;
 					base = cbs[precode].m_base;
 					if (base < 0) {
-						result.add(new Pointer(mark, position+1));
-						base = -base;
+						result.add(new Pointer(mark, position + 1));
+						mark = position;
+						searching = false;
 					}
-					position++;
-					continue;
+					if (++position < len && searching) {
+						continue;
+					}
 				}
 			}
-			//不在状态中，继续向后查询
-			position = ++mark;
+			// 不在状态中，继续向后查询
 			searching = false;
+			position = ++mark;
 			precode = 0;
 			base = 0;
 		}
 		return result;
 	}
-	
-//	public List<Pointer> check1(final String str) {
-//		List<Pointer> result = new ArrayList<Pointer>();
-//		int position = 0, mark = 0, code = 0, precode = 0, base = 0, len = str.length();
-//		boolean searching = false;  // 是否进入搜索状态
-//		while (position < len) {
-//			code = str.charAt(position);
-//			if (precode == 0) {
-//				precode = code;
-//			}
-//			if (code <= max_word_ascii) {
-//				if(base + code > cbs.length) {//超出范围
-//					position = ++mark;
-//					searching = false;
-//					precode = 0;
-//					base = 0 ;
-//					continue;
-//				}
-//				if (!searching && cbs[precode].m_check == -1) {
-//					base = cbs[precode].m_base;
-//					if (base < 0) {
-//						result.add(new Pointer(mark, position+1));
-//						mark = ++position;
-//						searching = false;
-//						base = 0;
-//						precode = 0;
-//						continue;
-//					}
-//					mark = position++;
-//					searching = true;
-//					continue;
-//				} else if (searching && cbs[base + code].m_check == precode) {
-//					precode = base + code;
-//					base = cbs[precode].m_base;
-//					if (base < 0) {
-//						result.add(new Pointer(mark, position+1));
-//						mark = ++position;
-//						searching = false;
-//						precode = 0;
-//						base = 0;
-//						continue;
-//					} else {
-//						position++;
-//					}
-//				} else {
-//					position = ++mark;
-//					searching = false;
-//					precode = 0;
-//					base = 0 ;
-//				}
-//
-//			} else {
-//				position = ++mark;
-//				searching = false;
-//				precode = 0;
-//				base = 0;
-//			}
-//		}
-//		return result;
-//	}
+
+	// public List<Pointer> check1(final String str) {
+	// List<Pointer> result = new ArrayList<Pointer>();
+	// int position = 0, mark = 0, code = 0, precode = 0, base = 0, len =
+	// str.length();
+	// boolean searching = false; // 是否进入搜索状态
+	// while (position < len) {
+	// code = str.charAt(position);
+	// if (precode == 0) {
+	// precode = code;
+	// }
+	// if (code <= max_word_ascii) {
+	// if(base + code > cbs.length) {//超出范围
+	// position = ++mark;
+	// searching = false;
+	// precode = 0;
+	// base = 0 ;
+	// continue;
+	// }
+	// if (!searching && cbs[precode].m_check == -1) {
+	// base = cbs[precode].m_base;
+	// if (base < 0) {
+	// result.add(new Pointer(mark, position+1));
+	// mark = ++position;
+	// searching = false;
+	// base = 0;
+	// precode = 0;
+	// continue;
+	// }
+	// mark = position++;
+	// searching = true;
+	// continue;
+	// } else if (searching && cbs[base + code].m_check == precode) {
+	// precode = base + code;
+	// base = cbs[precode].m_base;
+	// if (base < 0) {
+	// result.add(new Pointer(mark, position+1));
+	// mark = ++position;
+	// searching = false;
+	// precode = 0;
+	// base = 0;
+	// continue;
+	// } else {
+	// position++;
+	// }
+	// } else {
+	// position = ++mark;
+	// searching = false;
+	// precode = 0;
+	// base = 0 ;
+	// }
+	//
+	// } else {
+	// position = ++mark;
+	// searching = false;
+	// precode = 0;
+	// base = 0;
+	// }
+	// }
+	// return result;
+	// }
 
 	private static final byte[] serialize(Serializable data) {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
@@ -520,9 +571,8 @@ public class DATWriter {
 	@Override
 	public String toString() {
 		StringBuffer sbf = new StringBuffer("\nDAT info ...\n");
-		sbf.append("max_columns:  ").append(max_columns).append("\n")
-				.append("max_word_ascii: ").append(max_word_ascii).append("\n")
-				.append("cbs_allocCount: ").append(cbs_allocCount).append("\n");
+		sbf.append("max_columns:  ").append(max_columns).append("\n").append("max_word_ascii: ").append(max_word_ascii)
+				.append("\n").append("cbs_allocCount: ").append(cbs_allocCount).append("\n");
 		return sbf.toString();
 	}
 

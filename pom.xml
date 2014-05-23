@@ -5,19 +5,9 @@
 	<artifactId>mytools</artifactId>
 	<name>com.github.jzhongming.mytools</name>
 	<version>0.0.1-SNAPSHOT</version>
-
-	<distributionManagement>
-		<repository>
-			<id>releases</id>
-			<name>Internal Releases</name>
-			<url>http://10.58.120.19:8058/nexus/content/repositories/releases</url>
-		</repository>
-		<snapshotRepository>
-			<id>Snapshots</id>
-			<name>Internal Snapshots</name>
-			<url>http://10.58.120.19:8058/nexus/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
+	<!-- <distributionManagement> <repository> <id>releases</id> <name>Internal Releases</name> <url>http://10.58.120.19:8058/nexus/content/repositories/releases</url> 
+		</repository> <snapshotRepository> <id>Snapshots</id> <name>Internal Snapshots</name> <url>http://10.58.120.19:8058/nexus/content/repositories/snapshots</url> 
+		</snapshotRepository> </distributionManagement> -->
 
 	<properties>
 		<lib.dir>${project.build.directory}/lib</lib.dir>
@@ -57,14 +47,20 @@
 			<version>2.6</version>
 		</dependency>
 		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
-			<version>1.9.9</version>
+			<groupId>commons-net</groupId>
+			<artifactId>commons-net</artifactId>
+			<version>3.3</version>
+			<classifier>ftp</classifier>
 		</dependency>
 		<dependency>
 			<groupId>commons-dbcp</groupId>
 			<artifactId>commons-dbcp</artifactId>
 			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.9</version>
 		</dependency>
 		<dependency>
 			<groupId>com.jolbox</groupId>
