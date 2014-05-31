@@ -3,7 +3,6 @@ package com.github.jzhongming.mytools.Validcode;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -74,17 +73,17 @@ public class ValidCodeImg implements IValidImag {
 		return (null != os) ? os.toByteArray() : null;
 	}
 
-	private void drawDistort(Graphics g) {
-		int period = 8;
-		int frames = 2;
-		int phase = 3;
-		for (int i = 0, c = Math.min(width, height); i < c; i++) {
-			double d = (double) (period >> 1)
-					* Math.sin((double) i / (double) period + (6.2831853071795862D * (double) phase) / (double) frames);
-			g.copyArea(0, i, c, 1, (int) d, 0);
-			g.copyArea(i, 0, c, 1, (int) d, 0);
-		}
-	}
+//	private void drawDistort(Graphics g) {
+//		int period = 8;
+//		int frames = 2;
+//		int phase = 3;
+//		for (int i = 0, c = Math.min(width, height); i < c; i++) {
+//			double d = (double) (period >> 1)
+//					* Math.sin((double) i / (double) period + (6.2831853071795862D * (double) phase) / (double) frames);
+//			g.copyArea(0, i, c, 1, (int) d, 0);
+//			g.copyArea(i, 0, c, 1, (int) d, 0);
+//		}
+//	}
 
 	/**
 	 * 
@@ -162,14 +161,14 @@ public class ValidCodeImg implements IValidImag {
 	 * 
 	 * @param color
 	 */
-	private void drawPoints(Color color) {
-		graphics.setColor(color);
-		for (int i = 0; i < 1024; i++) {
-			int x = (int) (Math.random() * width);
-			int y = (int) (Math.random() * height);
-			graphics.drawLine(x, y, x, y);
-		}
-	}
+//	private void drawPoints(Color color) {
+//		graphics.setColor(color);
+//		for (int i = 0; i < 1024; i++) {
+//			int x = (int) (Math.random() * width);
+//			int y = (int) (Math.random() * height);
+//			graphics.drawLine(x, y, x, y);
+//		}
+//	}
 
 	// private void mm(OutputStream os) {
 	// // 得到指定Format图片的writer
