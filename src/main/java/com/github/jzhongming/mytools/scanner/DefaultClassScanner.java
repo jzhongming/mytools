@@ -9,7 +9,7 @@ public class DefaultClassScanner implements ClassScanner {
 	public Set<Class<?>> getClassList(String packageName) {
 		return new DefaultClassFilter(packageName) {
 			@Override
-			public boolean checkAddClass(Class<?> cls) {
+			public boolean filterCondition(Class<?> cls) {
 				String className = cls.getName();
 				String pkgName = className.substring(0, className.lastIndexOf("."));
 				return pkgName.startsWith(packageName);
@@ -22,7 +22,7 @@ public class DefaultClassScanner implements ClassScanner {
 	public Set<Class<?>> getClassListByAnnotation(String packageName, Class<? extends Annotation> annotationClass) {
 		return new AnnotationClassFilter(packageName, annotationClass) {
 			@Override
-			public boolean checkAddClass(Class<?> cls) {
+			public boolean filterCondition(Class<?> cls) {
 				return cls.isAnnotationPresent(annotationClass);
 			}
 		}.getClassList();
@@ -32,7 +32,7 @@ public class DefaultClassScanner implements ClassScanner {
 	public Set<Class<?>> getClassListBySuper(String packageName, Class<?> superClass) {
 		return new SupperClassFilter(packageName, superClass) {
 			@Override
-			public boolean checkAddClass(Class<?> cls) { // 这里去掉了内部类
+			public boolean filterCondition(Class<?> cls) { // 这里去掉了内部类
 				return superClass.isAssignableFrom(cls) && !superClass.equals(cls);// && !cls.getName().contains("$");
 			}
 

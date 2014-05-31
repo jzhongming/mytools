@@ -112,7 +112,7 @@ public abstract class DefaultClassFilter {
 		// 加载类
 		Class<?> cls = DefaultClassLoader.loadClass(className);
 		// 判断是否可以添加类
-		if (checkAddClass(cls)) {
+		if (filterCondition(cls)) {
 			// 添加类
 			logger.debug("add class:{}", cls.getName());
 			clazzes.add(cls);
@@ -122,5 +122,5 @@ public abstract class DefaultClassFilter {
 	// /**
 	// * 验证是否允许添加类
 	// */
-	 public abstract boolean checkAddClass(Class<?> cls);
+	 public abstract boolean filterCondition(Class<?> cls);
 }
