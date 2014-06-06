@@ -1,4 +1,4 @@
-package com.github.jzhongming.mytools.scanner;
+package com.github.jzhongming.mytools.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;

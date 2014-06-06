@@ -10,10 +10,11 @@ import java.io.IOException;
 
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FTPHelper {
-	private static final Logger logger = Logger.getLogger(FTPHelper.class);
+	private static final Logger logger = LoggerFactory.getLogger(FTPHelper.class);
 	
 	private final FTPClient ftpClient;
 	public FTPHelper(FTPClient ftpClient) {

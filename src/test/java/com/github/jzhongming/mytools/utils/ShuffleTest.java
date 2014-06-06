@@ -56,7 +56,7 @@ public class ShuffleTest {
 			shuffle1();
 		}
 		show();
-		System.out.println("=============================== 华丽分割线  ===============================");
+		System.out.println("------------------------------- 华丽分割线 -------------------------------");
 //		count = new int[card.length][card.length];
 //		for(int i=0; i<SHUFFLECOUNT; i++) {
 //			shuffle2();

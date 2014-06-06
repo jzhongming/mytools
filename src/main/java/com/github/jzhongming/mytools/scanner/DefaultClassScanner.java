@@ -38,15 +38,4 @@ public class DefaultClassScanner implements ClassScanner {
 
 		}.getClassList();
 	}
-
-	//Test code
-	public static void main(String[] args) {
-		ClassScanner csn = new DefaultClassScanner();
-		@SuppressWarnings("unused")
-		Set<Class<?>> cs = csn.getClassList("com.github.jzhongming.mytools.utils");
-		System.out.println("==================================================");
-		cs = csn.getClassListByAnnotation("com.github.jzhongming.mytools.scanner", QATest.class);
-		System.out.println("==================================================");
-		cs = csn.getClassListBySuper("com.github.jzhongming.mytools", DefaultClassFilter.class);
-	}
 }

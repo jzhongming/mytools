@@ -19,8 +19,7 @@ public abstract class DefaultClassFilter {
 	private static final Logger logger = LoggerFactory.getLogger(DefaultClassFilter.class);
 	
 	private static final ClassLoader DefaultClassLoader = Thread.currentThread().getContextClassLoader();
-//	private static final ClassLoader DefaultClassLoader = DefaultClassFilter.class.getClassLoader();
-	final String packageName;
+	protected final String packageName;
 
 	protected DefaultClassFilter(final String packageName) {
 		logger.debug("scan path: {}", packageName);
@@ -122,5 +121,5 @@ public abstract class DefaultClassFilter {
 	// /**
 	// * 验证是否允许添加类
 	// */
-	 public abstract boolean filterCondition(Class<?> cls);
+	 public abstract boolean filterCondition(Class<?> clazz);
 }

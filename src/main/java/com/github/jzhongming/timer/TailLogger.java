@@ -4,10 +4,11 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TailLogger {
-	private static final Logger logger = Logger.getLogger(TailLogger.class);
+	private static final Logger logger = LoggerFactory.getLogger(TailLogger.class);
 	private static final TimingWheel<TailLogReader> timer = new TimingWheel<TailLogReader>(1,5,TimeUnit.SECONDS);
 	
 	static {

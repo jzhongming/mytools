@@ -10,5 +10,4 @@ public abstract class AnnotationClassFilter extends DefaultClassFilter {
 		super(packageName);
 		this.annotationClass = annotationClass;
 	}
-
 }
