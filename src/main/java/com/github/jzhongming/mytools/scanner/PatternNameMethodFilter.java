@@ -1,6 +1,5 @@
 package com.github.jzhongming.mytools.scanner;
 
-
 public abstract class PatternNameMethodFilter extends DefaultMethodFilter {
 
 	protected final String methodPattern;

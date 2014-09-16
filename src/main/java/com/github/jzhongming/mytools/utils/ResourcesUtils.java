@@ -14,7 +14,6 @@ import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 
-
 /**
  * 资源工具类
  * 
@@ -61,34 +60,30 @@ public class ResourcesUtils {
 	public static URL getURL(String resourceLocation) throws FileNotFoundException {
 		return getURL(resourceLocation, DefaultClassLoader);
 	}
-	
+
 	public static URL getURL(String resourceLocation, ClassLoader classLoader) throws FileNotFoundException {
 		if (resourceLocation.startsWith(CLASSPATH_URL_PREFIX)) {
 			String path = resourceLocation.substring(CLASSPATH_URL_PREFIX.length());
 			URL url = classLoader.getResource(path);
 			if (url == null) {
 				String description = "class path resource [" + path + "]";
-				throw new FileNotFoundException(
-						description + " cannot be resolved to URL because it does not exist");
+				throw new FileNotFoundException(description + " cannot be resolved to URL because it does not exist");
 			}
 			return url;
 		}
 		try {
 			// try URL
 			return new URL(resourceLocation);
-		}
-		catch (MalformedURLException ex) {
+		} catch (MalformedURLException ex) {
 			// no URL -> treat as file path
 			try {
 				return new File(resourceLocation).toURI().toURL();
-			}
-			catch (MalformedURLException ex2) {
-				throw new FileNotFoundException("Resource location [" + resourceLocation +
-						"] is neither a URL not a well-formed file path");
+			} catch (MalformedURLException ex2) {
+				throw new FileNotFoundException("Resource location [" + resourceLocation + "] is neither a URL not a well-formed file path");
 			}
 		}
 	}
-	
+
 	public static URL extractJarFileURL(URL jarUrl) throws MalformedURLException {
 		String urlFile = jarUrl.getFile();
 		int separatorIndex = urlFile.indexOf(JAR_URL_SEPARATOR);
@@ -96,40 +91,38 @@ public class ResourcesUtils {
 			String jarFile = urlFile.substring(0, separatorIndex);
 			try {
 				return new URL(jarFile);
-			}
-			catch (MalformedURLException ex) {
-				// Probably no protocol in original jar URL, like "jar:C:/mypath/myjar.jar".
-				// This usually indicates that the jar file resides in the file system.
+			} catch (MalformedURLException ex) {
+				// Probably no protocol in original jar URL, like
+				// "jar:C:/mypath/myjar.jar".
+				// This usually indicates that the jar file resides in the file
+				// system.
 				if (!jarFile.startsWith("/")) {
 					jarFile = "/" + jarFile;
 				}
 				return new URL(FILE_URL_PREFIX + jarFile);
 			}
-		}
-		else {
+		} else {
 			return jarUrl;
 		}
 	}
-	
+
 	public static File getFile(String resourceLocation) throws FileNotFoundException {
 		return getFile(resourceLocation, DefaultClassLoader);
 	}
-	
+
 	public static File getFile(String resourceLocation, ClassLoader classloader) throws FileNotFoundException {
 		if (resourceLocation.startsWith(CLASSPATH_URL_PREFIX)) {
 			String path = resourceLocation.substring(CLASSPATH_URL_PREFIX.length());
 			URL url = classloader.getResource(path);
 			if (url == null) {
-				throw new FileNotFoundException(
-						resourceLocation + " cannot be resolved to absolute file path because it does not reside in the file system");
+				throw new FileNotFoundException(resourceLocation + " cannot be resolved to absolute file path because it does not reside in the file system");
 			}
 			return getFile(url);
 		}
 		try {
 			// try URL
 			return getFile(new URL(resourceLocation));
-		}
-		catch (MalformedURLException ex) {
+		} catch (MalformedURLException ex) {
 			// no URL -> treat as file path
 			return new File(resourceLocation);
 		}
@@ -137,14 +130,13 @@ public class ResourcesUtils {
 
 	public static File getFile(URL resourceUrl) throws FileNotFoundException {
 		if (!URL_PROTOCOL_FILE.equals(resourceUrl.getProtocol())) {
-			throw new FileNotFoundException(
-					"URL cannot be resolved to absolute file path because it does not reside in the file system: " + resourceUrl);
+			throw new FileNotFoundException("URL cannot be resolved to absolute file path because it does not reside in the file system: " + resourceUrl);
 		}
 		try {
 			return new File(toURI(resourceUrl).getSchemeSpecificPart());
-		}
-		catch (URISyntaxException ex) {
-			// Fallback for URLs that are not valid URIs (should hardly ever happen).
+		} catch (URISyntaxException ex) {
+			// Fallback for URLs that are not valid URIs (should hardly ever
+			// happen).
 			return new File(resourceUrl.getFile());
 		}
 	}
@@ -155,21 +147,21 @@ public class ResourcesUtils {
 		}
 		return new File(resourceUri.getSchemeSpecificPart());
 	}
-	
+
 	public static InputStream getResourceAsStream(final String resource) throws IOException {
 		InputStream in = new FileInputStream(getFile(resource, DefaultClassLoader));
 		return in;
 	}
-	
+
 	public static InputStream getResourceAsStream(final String resource, final ClassLoader loader) throws IOException {
 		InputStream in = new FileInputStream(getFile(resource, loader));
 		return in;
 	}
-	
+
 	public static Properties getResourceAsProperties(final String resource) throws IOException {
 		return getResourceAsProperties(resource, DefaultClassLoader);
 	}
-	
+
 	public static Properties getResourceAsProperties(final String resource, final ClassLoader loader) throws IOException {
 		Properties props = new Properties();
 		InputStream in = getResourceAsStream(resource, loader);
@@ -177,8 +169,6 @@ public class ResourcesUtils {
 		in.close();
 		return props;
 	}
-	
-	
 
 	public static URI toURI(URL url) throws URISyntaxException {
 		return toURI(url.toString());
@@ -206,7 +196,7 @@ public class ResourcesUtils {
 			return false;
 		}
 	}
-	
+
 	public static boolean isFileURL(URL url) {
 		String protocol = url.getProtocol();
 		return (URL_PROTOCOL_FILE.equals(protocol) || protocol.startsWith(URL_PROTOCOL_VFS));
@@ -216,9 +206,9 @@ public class ResourcesUtils {
 		String up = url.getProtocol();
 		return (URL_PROTOCOL_JAR.equals(up) || URL_PROTOCOL_ZIP.equals(up) || URL_PROTOCOL_WSJAR.equals(up));
 	}
-	
+
 	public static void main(String[] args) throws IOException {
-		Properties p = ResourcesUtils.getResourceAsProperties("log4j.properties");
+		Properties p = ResourcesUtils.getResourceAsProperties("logback.xml");
 		System.out.println(p);
 	}
 }

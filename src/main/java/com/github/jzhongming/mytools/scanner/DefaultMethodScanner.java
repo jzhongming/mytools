@@ -7,8 +7,9 @@ import java.util.List;
 public class DefaultMethodScanner implements MethodScanner {
 
 	@Override
-	public List<Method> getMethodList(Class<?> clazz, String methodPattern) {
+	public List<Method> getMethodList(Class<?> clazz, final String methodPattern) {
 		return new PatternNameMethodFilter(clazz, methodPattern) {
+			
 			@Override
 			public boolean filterCondition(Method method) {
 				return method.getName().matches(methodPattern);
@@ -19,7 +20,7 @@ public class DefaultMethodScanner implements MethodScanner {
 	@Override
 	public List<Method> getMethodListByAnnotation(Class<?> clazz, Class<? extends Annotation> annotationType) {
 		return new AnnotationMethodFilter(clazz, annotationType) {
-			
+
 			@Override
 			public boolean filterCondition(Method method) {
 				return method.isAnnotationPresent(annotationType);
@@ -33,22 +34,28 @@ public class DefaultMethodScanner implements MethodScanner {
 
 			@Override
 			public boolean filterCondition(Method method) {
-				if(method.isAnnotationPresent(annotationType)) {
+				if (method.isAnnotationPresent(annotationType)) {
 					return true;
 				}
 				Class<?>[] cls = clazz.getInterfaces();
 				for (Class<?> c : cls) {
 					try {
 						Method d = c.getDeclaredMethod(method.getName(), method.getParameterTypes());
-						if(d.isAnnotationPresent(annotationType)) {
+						if (d.isAnnotationPresent(annotationType)) {
 							return true;
 						}
-					}catch (Exception e) {
+					} catch (NoSuchMethodException e) {
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
 				}
 				return false;
 			}
 		}.getMethodList();
 	}
-	
+
+	public static void main(String[] args) {
+		DefaultMethodScanner dm = new DefaultMethodScanner();
+		System.out.println(dm.getMethodList(DefaultMethodScanner.class, "^getM.*"));
+	}
 }

@@ -16,7 +16,6 @@ import java.util.List;
  * @see
  * @since 1.0
  */
-
 public interface MethodScanner {
 	/**
 	 * 获取一个类上方法名符合正则的所有的方法

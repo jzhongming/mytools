@@ -38,4 +38,12 @@ public class DefaultClassScanner implements ClassScanner {
 
 		}.getClassList();
 	}
+	
+	public static void main(String[] args) throws Exception {
+		ClassScanner cs = new DefaultClassScanner();
+		Set<Class<?>> s  = cs.getClassList("com.github");
+		for(Class<?> c : s) {
+			System.out.println(c.getName());
+		}
+	}
 }

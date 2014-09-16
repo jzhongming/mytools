@@ -19,38 +19,37 @@ public class ResourcesUtil {
 		return Thread.currentThread().getContextClassLoader();
 	}
 
-	public static URL getResourceURL(final String resource,
-			final ClassLoader loader) {
+	public static URL getResourceURL(final String resource, final ClassLoader loader) {
 		URL url = null;
 		ClassLoader classLoader = loader;
-		
+
 		try {
-			if(classLoader != null) {
+			if (classLoader != null) {
 				url = classLoader.getResource(resource);
-				if(null != url) {
+				if (null != url) {
 					return url;
 				}
 			}
-			
+
 			classLoader = getTCL();
-			if(classLoader != null) {
+			if (classLoader != null) {
 				url = classLoader.getResource(resource);
-				if(null != url) {
+				if (null != url) {
 					return url;
 				}
 			}
-			
+
 			classLoader = ResourcesUtil.class.getClassLoader();
-			if(classLoader != null) {
+			if (classLoader != null) {
 				url = classLoader.getResource(resource);
-				if(null != url) {
+				if (null != url) {
 					return url;
 				}
 			}
-		} catch(Throwable t) {
+		} catch (Throwable t) {
 			t.printStackTrace();
 		}
-		
+
 		return url;
 	}
 
@@ -61,34 +60,34 @@ public class ResourcesUtil {
 	public static InputStream getResourceAsStream(final String resource, final ClassLoader loader) {
 		InputStream in = null;
 		ClassLoader classLoader = loader;
-		
+
 		try {
-			if(classLoader != null) {
+			if (classLoader != null) {
 				in = classLoader.getResourceAsStream(resource);
-				if(null != in) {
+				if (null != in) {
 					return in;
 				}
 			}
-			
+
 			classLoader = getTCL();
-			if(classLoader != null) {
+			if (classLoader != null) {
 				in = classLoader.getResourceAsStream(resource);
-				if(null != in) {
+				if (null != in) {
 					return in;
 				}
 			}
-			
+
 			classLoader = ResourcesUtil.class.getClassLoader();
-			if(classLoader != null) {
+			if (classLoader != null) {
 				in = classLoader.getResourceAsStream(resource);
-				if(null != in) {
+				if (null != in) {
 					return in;
 				}
 			}
-		}catch (Throwable t) {
+		} catch (Throwable t) {
 			t.printStackTrace();
 		}
-		
+
 		return in;
 	}
 
@@ -96,8 +95,7 @@ public class ResourcesUtil {
 		return getResourceAsStream(resource, null);
 	}
 
-	public static Properties getResourceAsProperties(final String resource,
-			final ClassLoader loader) throws IOException {
+	public static Properties getResourceAsProperties(final String resource, final ClassLoader loader) throws IOException {
 		Properties props = new Properties();
 		InputStream in = getResourceAsStream(resource, loader);
 		props.load(in);
@@ -117,29 +115,24 @@ public class ResourcesUtil {
 		return new InputStreamReader(getResourceAsStream(resource));
 	}
 
-	public static InputStreamReader getResourceAsReader(final String resource,
-			final ClassLoader loader) {
+	public static InputStreamReader getResourceAsReader(final String resource, final ClassLoader loader) {
 		return new InputStreamReader(getResourceAsStream(resource, loader));
 	}
 
-	public static Reader getResourceAsReader(final String resource,
-			final String charsetName) throws IOException {
+	public static Reader getResourceAsReader(final String resource, final String charsetName) throws IOException {
 		return new InputStreamReader(getResourceAsStream(resource), charsetName);
 	}
 
-	public static Reader getResourceAsReader(final String resource,
-			final ClassLoader loader, final String charsetName)
-			throws IOException {
+	public static Reader getResourceAsReader(final String resource, final ClassLoader loader, final String charsetName) throws IOException {
 		return new InputStreamReader(getResourceAsStream(resource, loader), charsetName);
 	}
 
-	public static File getResourceAsFile(final String resource,
-			final ClassLoader loader) {
+	public static File getResourceAsFile(final String resource, final ClassLoader loader) {
 		return new File(getResourceURL(resource, loader).getFile());
 	}
 
 	public static File getResourceAsFile(final String resource) {
 		return new File(getResourceURL(resource).getFile());
 	}
-	
+
 }

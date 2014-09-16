@@ -17,15 +17,18 @@ import com.github.jzhongming.mytools.utils.StringUtil;
 
 public abstract class DefaultClassFilter {
 	private static final Logger logger = LoggerFactory.getLogger(DefaultClassFilter.class);
-	
-	private static final ClassLoader DefaultClassLoader = Thread.currentThread().getContextClassLoader();
+
+	protected static ClassLoader DefaultClassLoader = Thread.currentThread().getContextClassLoader();
 	protected final String packageName;
 
 	protected DefaultClassFilter(final String packageName) {
-		logger.debug("scan path: {}", packageName);
 		this.packageName = packageName;
 	}
-
+	
+	protected DefaultClassFilter(final String packageName, ClassLoader classLoader) {
+		this.packageName = packageName;
+		DefaultClassFilter.DefaultClassLoader = classLoader;
+	}
 	public final Set<Class<?>> getClassList() {
 		Set<Class<?>> clazzes = new HashSet<Class<?>>();
 		try {
@@ -36,7 +39,7 @@ public abstract class DefaultClassFilter {
 			while (urls.hasMoreElements()) {
 				url = urls.nextElement();
 				if (url != null) {
-					logger.info("scan url {}",url.toString());
+					logger.info("scan url {}", url.toString());
 					// 获取协议名（分为 file 与 jar）
 					String protocol = url.getProtocol();
 					if (protocol.equals("file")) { // classPath下的.class文件
@@ -61,6 +64,7 @@ public abstract class DefaultClassFilter {
 				}
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error("find class error！", e);
 		}
 		return clazzes;
@@ -103,9 +107,11 @@ public abstract class DefaultClassFilter {
 				}
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error("find class error！", e);
 		}
 	}
+
 	//
 	private void doAddClass(Set<Class<?>> clazzes, String className) throws ClassNotFoundException {
 		// 加载类
@@ -117,9 +123,9 @@ public abstract class DefaultClassFilter {
 			clazzes.add(cls);
 		}
 	}
-	//
-	// /**
-	// * 验证是否允许添加类
-	// */
-	 public abstract boolean filterCondition(Class<?> clazz);
+
+	/**
+	 * 验证是否允许添加类
+	 */
+	public abstract boolean filterCondition(Class<?> clazz);
 }

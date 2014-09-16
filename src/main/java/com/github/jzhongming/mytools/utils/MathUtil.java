@@ -108,9 +108,7 @@ public class MathUtil {
 		int low = 0, high = array.length - 1;
 
 		while (low <= high) {
-			int middle = low + ((high - low) >> 1);// 减小Int溢出 (x+y)/2 ==
-													// (x&y)+((x^y)>>1) ==
-													// ((x-y)>>1)+y
+			int middle = low + ((high - low) >> 1);// 减小Int溢出 (x+y)/2 == (x&y)+((x^y)>>1) == ((x-y)>>1)+y
 
 			if (array[middle] > value) {
 				high = middle - 1;
@@ -207,29 +205,29 @@ public class MathUtil {
 	// }
 
 	public static boolean nextPermutation(int[] array) {
-		int i = array.length-2;
-		while(i >= 0 && array[i] > array[i+1])
+		int i = array.length - 2;
+		while (i >= 0 && array[i] > array[i + 1])
 			--i;
-		
-		if(i<0) {
+
+		if (i < 0) {
 			revertArray(array);
 			return true;
 		} else {
 			int j = i + 2;
-			while(j<array.length && array[j] > array[i])
+			while (j < array.length && array[j] > array[i])
 				++j;
 			--j;
-			
+
 			swap(array, i, j);
-			revertArray(array, i+1, array.length-1);
-			return (i==j);
+			revertArray(array, i + 1, array.length - 1);
+			return (i == j);
 		}
-		
+
 	}
-	
+
 	public static void main(String[] args) {
 		System.out.println(MathUtil.isEven(-432422));
-		System.out.println(MathUtil.isOdd(-432412));
+		System.out.println(MathUtil.isOdd(-432411));
 		char tt[] = { 'a', 'b', 'c', 'd', 'e' };
 		System.out.println(tt);
 		revertArray(tt);
@@ -245,7 +243,7 @@ public class MathUtil {
 		System.out.println((a + b) / 2);
 		System.out.println((a & b) + ((a ^ b) >> 1));
 		System.out.println(b + ((a - b) >> 1));
-		int[] itt = { 1,2,3};
+		int[] itt = { 1, 2, 3 };
 		while (!nextPermutation(itt)) {
 			for (int i : itt)
 				System.out.print(i);
