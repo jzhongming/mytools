@@ -46,7 +46,7 @@ public class JarFileClassLoader extends URLClassLoader {
 	}
 
 	public static void main(String[] args) throws Exception {
-		URLClassLoader loader = JarFileClassLoader.loadJars(new File("D:/gitspace/mytools/target"));
+		URLClassLoader loader = JarFileClassLoader.loadJars("D:/gitspace/mytools/target");
 		URL[] urls = loader.getURLs();
 		for (URL u : urls) {
 			System.out.println(u.toString());

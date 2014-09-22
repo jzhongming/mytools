@@ -3,7 +3,7 @@ package com.github.jzhongming.mytools.config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
@@ -25,13 +25,13 @@ public class LogBackConfigParserManager implements ConfigParserManager {
 
 	public AppenderConfig getAppenderConfig() {
 		NodeList list = document.getElementsByTagName("appender");
-		Element ele = (Element)list.item(0);
-		return appendParser.parse(ele);
+		Node node = list.item(0);
+		return appendParser.parse(node);
 	}
 
 	public RootConfig getRootConfig() {
 		NodeList list = document.getElementsByTagName("root");
-		Element ele = (Element)list.item(0);
-		return rootParser.parse(ele);
+		Node node = list.item(0);
+		return rootParser.parse(node);
 	}
 }

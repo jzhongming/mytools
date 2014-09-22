@@ -1,6 +1,5 @@
 package com.github.jzhongming.socket.impl;
 
-import java.nio.channels.Selector;
 
 /**
  * 分发器，接收反应器(Reactor)并做对应分发
@@ -9,7 +8,7 @@ import java.nio.channels.Selector;
  * 
  */
 public final class Dispatcher implements Runnable {
-	private Selector selector;
+//	private Selector selector;
 
 	@Override
 	public void run() {

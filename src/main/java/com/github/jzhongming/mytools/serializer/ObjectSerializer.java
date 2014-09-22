@@ -1,24 +1,26 @@
-package com.github.jzhongming.mytools.scf.serializer;
+package com.github.jzhongming.mytools.serializer;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 
-public class ObjectSerializer implements SerializerBase {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class ObjectSerializer implements ISerializer {
+	private static final Logger logger = LoggerFactory.getLogger(ObjectSerializer.class);
 
 	@Override
-	public void WriteObject(Object obj, SCFOutStream outStream) throws Exception {
+	public void WriteObject(Object obj, CCOutStream outStream) throws Exception {
 		if (obj == null) {
 			SerializerFactory.GetSerializer(null).WriteObject(null, outStream);
 			return;
 		}
 		Class<?> type = obj.getClass();
-		int typeId = TypeHelper.getTypeId(type);
-		outStream.WriteInt32(typeId);
-		if (outStream.WriteRef(obj)) {
+		TypeInfo typeInfo = TypeHelper.getTypeInfo(type);
+		outStream.WriteInt32(typeInfo.getTypeId());
+		if (outStream.isRefWrited(obj)) {
 			return;
 		}
-		for (Field f : getFileds(type)) {
+		for (Field f : typeInfo.getFields()) {
 			Object value = f.get(obj);
 			if (value == null) {
 				SerializerFactory.GetSerializer(null).WriteObject(null, outStream);
@@ -31,18 +33,19 @@ public class ObjectSerializer implements SerializerBase {
 	}
 
 	@Override
-	public Object ReadObject(SCFInStream inStream, Class<?> clazz) throws Exception {
+	public Object ReadObject(CCInStream inStream, Class<?> clazz) throws Exception {
 		int typeId = inStream.ReadInt32();
 		if (typeId == 0) {
 			return null;
 		}
 
-		Class<?> type = TypeHelper.getType(typeId);
+		Class<?> type = TypeHelper.getIdType(typeId);
 		if (type == null) {
 			throw new ClassNotFoundException("Cannot find class with typId,target class:" + clazz.getName() + ",typeId:" + typeId);
 		}
 		if (!clazz.isAssignableFrom(type) && clazz != type) {
-			throw new ClassNotFoundException("Class not match!class:" + type.getName() + ",require " + clazz.getName());
+			logger.warn("match {} : {}", type.getSimpleName(), clazz.getSimpleName());
+			throw new ClassNotFoundException("Class not match!class: " + type.getName() + " ==> " + clazz.getName());
 		}
 
 		byte isRef = (byte) inStream.read();
@@ -51,13 +54,14 @@ public class ObjectSerializer implements SerializerBase {
 			return inStream.GetRef(hashcode);
 		}
 		Object obj = type.newInstance();
-		for (Field f : getFileds(clazz)) {
+		TypeInfo typeInfo = TypeHelper.getTypeInfo(type);
+		for (Field f : typeInfo.getFields()) {
 			int ptypeId = inStream.ReadInt32();
 			if (ptypeId == 0) {
 				f.set(obj, null);
 				continue;
 			}
-			Class<?> ptype = TypeHelper.getType(ptypeId);
+			Class<?> ptype = TypeHelper.getIdType(ptypeId);
 			if (ptype == null) {
 				throw new ClassNotFoundException("Cannot find class with typId,target class: " + f.getType().getName() + ",typeId:" + ptypeId);
 			}
@@ -66,22 +70,6 @@ public class ObjectSerializer implements SerializerBase {
 		}
 		inStream.SetRef(hashcode, obj);
 		return obj;
-	}
-	
-	private List<Field> getFileds(Class<?> temType) {
-		List<Field> fields = new ArrayList<Field>();
-		while (true) {
-            Field[] fs = temType.getDeclaredFields();
-            for (Field f : fs) {
-                fields.add(f);
-            }
-            Class<?> superClass = temType.getSuperclass();
-            if (superClass == null) {
-                break;
-            }
-            temType = superClass;
-        }
-		return fields;
 	}
 
 }

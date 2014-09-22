@@ -1,11 +1,11 @@
-package com.github.jzhongming.mytools.scf.serializer;
+package com.github.jzhongming.mytools.serializer;
 
 import java.lang.reflect.Array;
 
-public class ArraySerializer implements SerializerBase {
+public class ArraySerializer implements ISerializer {
 
 	@Override
-	public void WriteObject(Object obj, SCFOutStream outStream) throws Exception {
+	public void WriteObject(Object obj, CCOutStream outStream) throws Exception {
 		if (obj == null) {
 			SerializerFactory.GetSerializer(null).WriteObject(null, outStream);
 			return;
@@ -15,7 +15,7 @@ public class ArraySerializer implements SerializerBase {
 		int typeId = TypeHelper.getTypeId(type);
 
 		outStream.WriteInt32(typeId);
-		if (outStream.WriteRef(obj)) {
+		if (outStream.isRefWrited(obj)) {
 			return;
 		}
 
@@ -117,7 +117,7 @@ public class ArraySerializer implements SerializerBase {
 	}
 
 	@Override
-	public Object ReadObject(SCFInStream inStream, Class<?> clazz) throws Exception {
+	public Object ReadObject(CCInStream inStream, Class<?> clazz) throws Exception {
 		int typeId = inStream.ReadInt32();
 		if (typeId == 0) {
 			return null;
@@ -131,7 +131,7 @@ public class ArraySerializer implements SerializerBase {
 		if (len > TypeHelper.MAX_DATA_LEN) {
 			throw new IllegalArgumentException("Data length overflow.");
 		}
-		Class<?> type = TypeHelper.getType(typeId);
+		Class<?> type = TypeHelper.getIdType(typeId);
 		if (type == null) {
 			throw new ClassNotFoundException("Cannot find class with typId,target class:" + clazz.getName() + ",typeId:" + typeId);
 		}
@@ -148,7 +148,6 @@ public class ArraySerializer implements SerializerBase {
 					short data = inStream.ReadInt16();
 					byte[] buffer = ByteHelper.GetBytesFromInt16(data);
 					charArray[i] = ByteHelper.getCharFromBytes(buffer);
-					;
 				}
 				return charArray;
 			} else if (clazz == short[].class) {
@@ -205,7 +204,7 @@ public class ArraySerializer implements SerializerBase {
 				if (itemTypeId == 0) {
 					array[i] = null;
 				} else {
-					Class<?> itemType = TypeHelper.getType(itemTypeId);
+					Class<?> itemType = TypeHelper.getIdType(itemTypeId);
 					if (itemType == null) {
 						throw new ClassNotFoundException("Cannot find class with typId,target class:" + type.getName() + ",typeId:" + itemTypeId);
 					}

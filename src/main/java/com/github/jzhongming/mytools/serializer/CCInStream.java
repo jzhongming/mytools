@@ -1,32 +1,28 @@
-package com.github.jzhongming.mytools.scf.serializer;
+package com.github.jzhongming.mytools.serializer;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class SCFInStream extends ByteArrayInputStream {
+public class CCInStream extends ByteArrayInputStream {
 
 	private ConcurrentHashMap<Integer, Object> _RefPool = new ConcurrentHashMap<Integer, Object>();
 
-	public SCFInStream(byte[] buf) {
+	public CCInStream(byte[] buf) {
 		super(buf);
 	}
 
-	public SCFInStream(byte[] buffer, int offset, int length) {
+	public CCInStream(byte[] buffer, int offset, int length) {
 		super(buffer, offset, length);
 	}
 
-	public void SafeRead(byte[] buffer) throws IllegalArgumentException,
-			IOException {
+	public void SafeRead(byte[] buffer) throws IllegalArgumentException, IOException {
 		if (this.read(buffer) != buffer.length) {
-			throw new IllegalArgumentException("buffer is error length");
+			throw new IllegalArgumentException("Stream error: buffer is error length");
 		}
 	}
 
 	public Object GetRef(int hashcode) {
-		if (hashcode == 0) {
-			return null;
-		}
 		return _RefPool.get(hashcode);
 	}
 

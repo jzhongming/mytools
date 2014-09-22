@@ -2,28 +2,36 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.jzhongming.mytools.scf.serializer;
+package com.github.jzhongming.mytools.serializer;
 
+import java.io.NotSerializableException;
 import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.jzhongming.mytools.serializer.annotation.CCMember;
+import com.github.jzhongming.mytools.serializer.annotation.CCNotMember;
+import com.github.jzhongming.mytools.serializer.annotation.CCSerializable;
 
 public class TypeHelper {
 	private static final Logger logger = LoggerFactory.getLogger(TypeHelper.class);
 	private static Map<Class<?>, ClassItem> TypeIdMap = new HashMap<Class<?>, ClassItem>();
 	private static Map<Integer, ClassItem> IdTypeMap = new HashMap<Integer, ClassItem>();
-	public static final int MAX_DATA_LEN = 1024 * 1024 * 10;
+	private static Map<Class<?>, TypeInfo> TypeInfoMap = new HashMap<Class<?>, TypeInfo>();
+
+	public static final int MAX_DATA_LEN = 1024 * 1024 * 100;
+	public static final Charset ENCODER = Charset.forName("UTF-8");
 	static {
+		logger.info("init TypeHelper ... \nDefault Encoder: {}", ENCODER);
 		TypeIdMap.clear();
 		IdTypeMap.clear();
 		ArrayList<ClassItem> ClassList = new ArrayList<ClassItem>();
@@ -44,12 +52,6 @@ public class TypeHelper {
 		ClassList.add(new ClassItem(15, Set.class));
 		ClassList.add(new ClassItem(16, Enum.class));
 		ClassList.add(new ClassItem(17, java.util.Date.class, java.sql.Date.class, java.sql.Time.class, java.sql.Timestamp.class));
-//		ClassList.add(new ClassItem(18, AtomicBoolean.class));
-//		ClassList.add(new ClassItem(19, AtomicInteger.class));
-//		ClassList.add(new ClassItem(20, AtomicLong.class));
-//		ClassList.add(new ClassItem(21, Inet4Address.class));
-		// ClassList.add(new ClassItem(0, DBNull.class));
-		// ClassList.add(new ClassItem(0, GKeyValuePair.class));
 		for (ClassItem item : ClassList) {
 			int id = item.getTypeId();
 			Class<?>[] types = item.getTypes();
@@ -60,16 +62,17 @@ public class TypeHelper {
 		}
 		ClassList.clear();
 		ClassList = null;
-		logger.info("Type Init Successful! [{} : {}]", IdTypeMap.size(), TypeIdMap.size());
 	}
 
-	public static Class<?> getType(int typeId) {
+	public static Class<?> getIdType(int typeId) {
 		ClassItem ci = IdTypeMap.get(typeId);
 		return (ci == null) ? null : ci.getType();
 	}
 
 	public static int getTypeId(Class<?> type) {
-		if (type.isEnum()) {
+		if (null == type) {
+			return 0;
+		} else if (type.isEnum()) {
 			type = Enum.class;
 		} else if (type.isArray()) {
 			type = Array.class;
@@ -84,7 +87,7 @@ public class TypeHelper {
 		return (ci == null) ? -1 : ci.getTypeId();
 	}
 
-	public static void setTypeMap(Class<?> type, int typeId) {
+	protected static void setTypeMap(Class<?> type, int typeId) {
 		ClassItem ci = new ClassItem(typeId, type);
 		TypeIdMap.put(type, ci);
 		IdTypeMap.put(typeId, ci);
@@ -113,9 +116,66 @@ public class TypeHelper {
 		return false;
 	}
 
-	public static void main(String[] args) {
-		logger.info("{}", TypeHelper.getTypeId(LinkedList.class));
-		logger.info("{}", TypeHelper.getTypeId(ConcurrentHashMap.class));
-		logger.info("{}", TypeHelper.getTypeId(TreeSet.class));
+	public static TypeInfo getTypeInfo(Class<?> clazz) throws NotSerializableException {
+		if (TypeInfoMap.containsKey(clazz)) {
+			return TypeInfoMap.get(clazz);
+		}
+
+		if (!clazz.isAnnotationPresent(CCSerializable.class)) {
+			throw new NotSerializableException(clazz.getName() + " do not have a CCSerializable Annotation");
+		}
+
+		int typeId = TypeHelper.getTypeId(clazz);
+		TypeInfo typeInfo = new TypeInfo(typeId);
+		List<Field> tmpFields = new ArrayList<Field>();
+		Class<?> temType = clazz;
+		while (true) {
+			Field[] fs = temType.getDeclaredFields();
+			for (Field f : fs) {
+				tmpFields.add(f);
+			}
+			Class<?> superClass = temType.getSuperclass();
+			if (superClass == null) {
+				break;
+			}
+			temType = superClass;
+		}
+
+		CCSerializable cAnn = clazz.getAnnotation(CCSerializable.class);
+		if (cAnn.isDefaultAll()) {
+			for (Field fd : tmpFields) {
+				if (fd.isAnnotationPresent(CCNotMember.class)) {
+					continue;
+				}
+				fd.setAccessible(true);
+				typeInfo.getFields().add(fd);
+			}
+		} else {
+			for (Field fd : tmpFields) {
+				if (fd.isAnnotationPresent(CCMember.class)) {
+					fd.setAccessible(true);
+					typeInfo.getFields().add(fd);
+				}
+			}
+		}
+
+		TypeInfoMap.put(clazz, typeInfo);
+		return typeInfo;
+	}
+
+	public static int makeTypeId(String name) {
+		int hash1 = 5381;
+		int hash2 = hash1;
+		int len = name.length();
+		for (int i = 0; i < len; i++) {
+			int c = name.charAt(i);
+			hash1 = ((hash1 << 5) + hash1) ^ c;
+			if (++i >= len) {
+				break;
+			}
+			c = name.charAt(i);
+			hash2 = ((hash2 << 5) + hash2) ^ c;
+		}
+		return hash1 + (hash2 * 1566083941);
 	}
 }

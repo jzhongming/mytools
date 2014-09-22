@@ -1,17 +1,12 @@
-package com.github.jzhongming.mytools.scf.serializer;
+package com.github.jzhongming.mytools.serializer;
 
-import java.nio.charset.Charset;
-
-public class StringSerializer implements SerializerBase {
-	private Charset Encoder = Charset.forName("UTF-8");
-	
+public class StringSerializer implements ISerializer {
 	@Override
-	public void WriteObject(Object obj, SCFOutStream outStream)
-			throws Exception {
-		if (outStream.WriteRef(obj)) {
+	public void WriteObject(Object obj, CCOutStream outStream) throws Exception {
+		if (outStream.isRefWrited(obj)) {
 			return;
 		}
-		byte[] buffer = obj.toString().getBytes(Encoder);
+		byte[] buffer = obj.toString().getBytes(TypeHelper.ENCODER);
 		byte[] bLen = ByteHelper.GetBytesFromInt32(buffer.length);
 		byte[] bytes = new byte[buffer.length + 4];
 		System.arraycopy(bLen, 0, bytes, 0, 4);
@@ -20,7 +15,7 @@ public class StringSerializer implements SerializerBase {
 	}
 
 	@Override
-	public Object ReadObject(SCFInStream inStream, Class<?> clazz) throws Exception {
+	public Object ReadObject(CCInStream inStream, Class<?> clazz) throws Exception {
 		int isRef = (byte) inStream.read();
 		int hashcode = inStream.ReadInt32();
 		if (isRef > 0) {
@@ -32,7 +27,7 @@ public class StringSerializer implements SerializerBase {
 		}
 		int len = inStream.ReadInt32();
 		if (len > TypeHelper.MAX_DATA_LEN) {
-			throw new IllegalArgumentException("Data length overflow. max [1024 * 1024 * 10]");
+			throw new IllegalArgumentException("Data length overflow. max [1024 * 1024 * 100]");
 		}
 		if (len == 0) {
 			inStream.SetRef(hashcode, "");
@@ -40,7 +35,7 @@ public class StringSerializer implements SerializerBase {
 		}
 		byte[] buffer = new byte[len];
 		inStream.SafeRead(buffer);
-		String str = new String(buffer, Encoder);
+		String str = new String(buffer, TypeHelper.ENCODER);
 		inStream.SetRef(hashcode, str);
 		return str;
 	}

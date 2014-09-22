@@ -1,15 +1,15 @@
-package com.github.jzhongming.mytools.scf.serializer;
+package com.github.jzhongming.mytools.serializer;
 
-public class CharSerializer implements SerializerBase {
+public class CharSerializer implements ISerializer {
 
 	@Override
-	public void WriteObject(Object obj, SCFOutStream outStream) throws Exception {
+	public void WriteObject(Object obj, CCOutStream outStream) throws Exception {
 		byte[] bs = ByteHelper.GetBytesFromChar((Character) obj);
 		outStream.write(bs);
 	}
 
 	@Override
-	public Object ReadObject(SCFInStream inStream, Class<?> clazz) throws Exception {
+	public Object ReadObject(CCInStream inStream, Class<?> clazz) throws Exception {
 		short data = inStream.ReadInt16();
 		byte[] buffer = ByteHelper.GetBytesFromInt16(data);
 		return ByteHelper.getCharFromBytes(buffer);
@@ -18,9 +18,9 @@ public class CharSerializer implements SerializerBase {
 	public static void main(String[] args) throws Exception {
 		Character c = 'D';
 		CharSerializer cs = new CharSerializer();
-		SCFOutStream scfO = new SCFOutStream();
+		CCOutStream scfO = new CCOutStream();
 		cs.WriteObject(c, scfO);
-		SCFInStream scfI = new SCFInStream(scfO.toByteArray());
+		CCInStream scfI = new CCInStream(scfO.toByteArray());
 		System.out.println(cs.ReadObject(scfI, Character.class));
 	}
 

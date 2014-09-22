@@ -1,4 +1,4 @@
-package com.github.jzhongming.mytools.scf.serializer;
+package com.github.jzhongming.mytools.serializer;
 
 public class ClassItem {
 
