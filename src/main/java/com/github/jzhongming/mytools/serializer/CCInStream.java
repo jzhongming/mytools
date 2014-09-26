@@ -22,12 +22,12 @@ public class CCInStream extends ByteArrayInputStream {
 		}
 	}
 
-	public Object GetRef(int hashcode) {
-		return _RefPool.get(hashcode);
+	public Object GetRef(int refId) {
+		return _RefPool.get(refId);
 	}
 
-	public void SetRef(int hashcode, Object obj) {
-		_RefPool.putIfAbsent(hashcode, obj);
+	public void SetRef(int refId, Object obj) {
+		_RefPool.putIfAbsent(refId, obj);
 	}
 
 	public short ReadInt16() throws Exception {

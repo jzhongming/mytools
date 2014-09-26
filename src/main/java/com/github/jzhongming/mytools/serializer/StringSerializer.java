@@ -17,9 +17,9 @@ public class StringSerializer implements ISerializer {
 	@Override
 	public Object ReadObject(CCInStream inStream, Class<?> clazz) throws Exception {
 		int isRef = (byte) inStream.read();
-		int hashcode = inStream.ReadInt32();
+		int refId = inStream.ReadInt32();
 		if (isRef > 0) {
-			Object obj = inStream.GetRef(hashcode);
+			Object obj = inStream.GetRef(refId);
 			if (obj == null) {
 				return "";
 			}
@@ -30,13 +30,13 @@ public class StringSerializer implements ISerializer {
 			throw new IllegalArgumentException("Data length overflow. max [1024 * 1024 * 100]");
 		}
 		if (len == 0) {
-			inStream.SetRef(hashcode, "");
+			inStream.SetRef(refId, "");
 			return "";
 		}
 		byte[] buffer = new byte[len];
 		inStream.SafeRead(buffer);
 		String str = new String(buffer, TypeHelper.ENCODER);
-		inStream.SetRef(hashcode, str);
+		inStream.SetRef(refId, str);
 		return str;
 	}
 

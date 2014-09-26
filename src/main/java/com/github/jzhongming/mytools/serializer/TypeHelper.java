@@ -163,19 +163,12 @@ public class TypeHelper {
 		return typeInfo;
 	}
 
-	public static int makeTypeId(String name) {
-		int hash1 = 5381;
-		int hash2 = hash1;
-		int len = name.length();
-		for (int i = 0; i < len; i++) {
-			int c = name.charAt(i);
-			hash1 = ((hash1 << 5) + hash1) ^ c;
-			if (++i >= len) {
-				break;
-			}
-			c = name.charAt(i);
-			hash2 = ((hash2 << 5) + hash2) ^ c;
+	public static int makeTypeId(String k) {
+		int step = (k.length() >> 5) + 1;
+		int rv = k.length();
+		for (int len = k.length(); len >= step; len -= step) {
+			rv = rv ^ (rv << 5) + (rv >> 2) + k.charAt(len - 1);
 		}
-		return hash1 + (hash2 * 1566083941);
+		return rv & 0xffffffff;
 	}
 }

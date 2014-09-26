@@ -1,7 +1,9 @@
 package com.github.jzhongming.mytools.serializer;
 
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.lang.IllegalClassException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,21 +13,12 @@ import com.github.jzhongming.mytools.serializer.annotation.CCSerializable;
 
 public final class DefaultSerializerEngine implements ISerializerEngine {
 	private static final Logger logger = LoggerFactory.getLogger(DefaultSerializerEngine.class);
+	private final ConcurrentHashMap<String, String> clash = new ConcurrentHashMap<String, String>();
 
 	private void initEngine() {
 		logger.info("init Serializer engine ...");
 		long start = System.currentTimeMillis();
-		String mode = System.getProperty("Serializerengine.Mode");
-		if (mode != null && mode.equals("asyn")) {
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					lodingLocalePackage();
-				}
-			}).start();
-		} else {
-			lodingLocalePackage();
-		}
+		lodingLocalePackage();
 		logger.info("Serializer init cost time: {} ms", (System.currentTimeMillis() - start));
 	}
 
@@ -33,7 +26,7 @@ public final class DefaultSerializerEngine implements ISerializerEngine {
 		ClassScanner csc = new DefaultClassScanner();
 		final Set<Class<?>> classes = csc.getClassListByAnnotation("com.github.jzhongming", CCSerializable.class);
 		for (Class<?> c : classes) {
-			logger.info("scaning {}.{}", c.getPackage().getName(), c.getName());
+			logger.info("scaning {}", c.getName());
 			try {
 				CCSerializable ann = c.getAnnotation(CCSerializable.class);
 				if (null == ann) {
@@ -42,6 +35,9 @@ public final class DefaultSerializerEngine implements ISerializerEngine {
 				String name = ann.name();
 				if (name.isEmpty()) {
 					name = c.getSimpleName();
+				}
+				if (null != clash.putIfAbsent(name, "")) {
+					throw new IllegalClassException("class @CCSerializable( name= " + name + ") is clash");
 				}
 				int typeId = TypeHelper.makeTypeId(name);
 				TypeHelper.setTypeMap(c, typeId);

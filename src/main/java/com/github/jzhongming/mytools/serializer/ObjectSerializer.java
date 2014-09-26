@@ -49,9 +49,9 @@ public class ObjectSerializer implements ISerializer {
 		}
 
 		byte isRef = (byte) inStream.read();
-		int hashcode = inStream.ReadInt32();
+		int refId = inStream.ReadInt32();
 		if (isRef > 0) {
-			return inStream.GetRef(hashcode);
+			return inStream.GetRef(refId);
 		}
 		Object obj = type.newInstance();
 		TypeInfo typeInfo = TypeHelper.getTypeInfo(type);
@@ -68,7 +68,7 @@ public class ObjectSerializer implements ISerializer {
 			Object value = SerializerFactory.GetSerializer(ptype).ReadObject(inStream, f.getType());
 			f.set(obj, value);
 		}
-		inStream.SetRef(hashcode, obj);
+		inStream.SetRef(refId, obj);
 		return obj;
 	}
 

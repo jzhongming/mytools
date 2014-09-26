@@ -39,7 +39,7 @@ public abstract class DefaultClassFilter {
 			while (urls.hasMoreElements()) {
 				url = urls.nextElement();
 				if (url != null) {
-					logger.info("scan url ... {}", url.toString());
+					logger.info("scan url >> {}", url.toString());
 					// 获取协议名（分为 file 与 jar）
 					String protocol = url.getProtocol();
 					if (protocol.equals("file")) { // classPath下的.class文件

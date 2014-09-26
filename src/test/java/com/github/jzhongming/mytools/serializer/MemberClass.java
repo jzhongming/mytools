@@ -2,13 +2,11 @@ package com.github.jzhongming.mytools.serializer;
 
 import java.util.Date;
 
-import com.github.jzhongming.mytools.serializer.annotation.CCNotMember;
 import com.github.jzhongming.mytools.serializer.annotation.CCSerializable;
 
-@CCSerializable(isDefaultAll=true)
+@CCSerializable(name="CopyOfMemberClass", isDefaultAll=true)
 public class MemberClass {
 	private int a = 123;
-	@CCNotMember
 	private boolean b = true;
 	private String c = "Jack.J";
 	private Date d = new Date();

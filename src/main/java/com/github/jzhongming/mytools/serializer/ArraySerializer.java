@@ -123,9 +123,9 @@ public class ArraySerializer implements ISerializer {
 			return null;
 		}
 		byte isRef = (byte) inStream.read();
-		int hashcode = inStream.ReadInt32();
+		int refId = inStream.ReadInt32();
 		if (isRef > 0) {
-			return inStream.GetRef(hashcode);
+			return inStream.GetRef(refId);
 		}
 		int len = inStream.ReadInt32();
 		if (len > TypeHelper.MAX_DATA_LEN) {
@@ -218,7 +218,7 @@ public class ArraySerializer implements ISerializer {
 				array[i] = value;
 			}
 		}
-		inStream.SetRef(hashcode, array);
+		inStream.SetRef(refId, array);
 		return array;
 	}
 
