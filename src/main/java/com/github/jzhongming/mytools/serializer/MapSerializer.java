@@ -11,6 +11,7 @@ public class MapSerializer implements ISerializer {
 	public void WriteObject(Object obj, CCOutStream outStream) throws Exception {
 		if (null == obj) {
 			SerializerFactory.GetSerializer(null).WriteObject(null, outStream);
+			return;
 		}
 		int typeId = TypeHelper.getTypeId(Map.class);
 		outStream.WriteInt32(typeId);

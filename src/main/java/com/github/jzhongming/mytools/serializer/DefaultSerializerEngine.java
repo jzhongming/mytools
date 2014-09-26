@@ -31,7 +31,7 @@ public final class DefaultSerializerEngine implements ISerializerEngine {
 
 	private void lodingLocalePackage() {
 		ClassScanner csc = new DefaultClassScanner();
-		final Set<Class<?>> classes = csc.getClassList("com.github.jzhongming.mytools");
+		final Set<Class<?>> classes = csc.getClassListByAnnotation("com.github.jzhongming", CCSerializable.class);
 		for (Class<?> c : classes) {
 			logger.info("scaning {}.{}", c.getPackage().getName(), c.getName());
 			try {
@@ -85,9 +85,4 @@ public final class DefaultSerializerEngine implements ISerializerEngine {
 		}
 	}
 
-	public static void main(String[] args) throws Exception {
-		DefaultSerializerEngine dse = new DefaultSerializerEngine();
-		String s = "中华人民共和国";
-		System.out.println(dse.Derialize(dse.Serialize(s), s.getClass()));
-	}
 }
