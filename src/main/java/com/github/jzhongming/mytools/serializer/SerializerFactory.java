@@ -2,7 +2,7 @@ package com.github.jzhongming.mytools.serializer;
 
 /**
  * 
- * @author Jack.J
+ * @author Zach.J
  * 
  */
 class SerializerFactory {

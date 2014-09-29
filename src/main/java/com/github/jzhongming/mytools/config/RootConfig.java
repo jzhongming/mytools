@@ -2,7 +2,7 @@ package com.github.jzhongming.mytools.config;
 
 /**
  * 解释Logback Root节点数据类， Demo示例
- * @author Jack.J
+ * @author Zack.J
  *
  */
 public class RootConfig implements IConfig {

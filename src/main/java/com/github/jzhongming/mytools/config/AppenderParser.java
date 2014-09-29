@@ -5,7 +5,7 @@ import org.w3c.dom.Node;
 
 /**
  * Logback Appender 节点解释实现类  Demo示例
- * @author Jack.J
+ * @author Zach.J
  *
  */
 public class AppenderParser implements Parser<AppenderConfig> {

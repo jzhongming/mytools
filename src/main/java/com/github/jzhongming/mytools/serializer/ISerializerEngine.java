@@ -3,7 +3,7 @@ package com.github.jzhongming.mytools.serializer;
 /**
  * 序列化引擎接口
  * 
- * @author Jack.J
+ * @author Zach.J
  * 
  */
 public interface ISerializerEngine {

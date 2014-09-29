@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 /**
  * 配置文件引擎，负责加载XML配置文件
- * @author Jack.J
+ * @author Zach.J
  *
  */
 public class ConfigurationEngine {

@@ -8,7 +8,7 @@ import com.github.jzhongming.mytools.serializer.annotation.CCSerializable;
 public class MemberClass {
 	private int a = 123;
 	private boolean b = true;
-	private String c = "Jack.J";
+	private String c = "Zach.J";
 	private Date d = new Date();
 
 	public int getA() {
