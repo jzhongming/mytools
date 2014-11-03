@@ -15,10 +15,11 @@ import org.slf4j.LoggerFactory;
 
 public class FTPHelper {
 	private static final Logger logger = LoggerFactory.getLogger(FTPHelper.class);
-	
+
 	private final FTPClient ftpClient;
+
 	public FTPHelper(FTPClient ftpClient) {
-		if(null == ftpClient) {
+		if (null == ftpClient) {
 			throw new IllegalArgumentException("FTPClient is null!");
 		}
 		this.ftpClient = ftpClient;
@@ -37,7 +38,7 @@ public class FTPHelper {
 		boolean success = false;
 		try {
 			boolean changeOK = this.ftpClient.changeWorkingDirectory(remotUpLoadePath);// 改变工作路径
-			if(!changeOK) {
+			if (!changeOK) {
 				logger.info("改变工作目录失败 --> " + remotUpLoadePath);
 				return success;
 			}
@@ -77,14 +78,13 @@ public class FTPHelper {
 	 *            remoteFileName所在的路径
 	 * */
 
-	public boolean downloadFile(String remoteFileName, String localDires,
-			String remoteDownLoadPath) {
+	public boolean downloadFile(String remoteFileName, String localDires, String remoteDownLoadPath) {
 		String strFilePath = localDires + remoteFileName;
 		BufferedOutputStream outStream = null;
 		boolean success = false;
 		try {
 			boolean changeOK = this.ftpClient.changeWorkingDirectory(remoteDownLoadPath);// 改变工作路径
-			if(!changeOK) {
+			if (!changeOK) {
 				logger.info("改变工作目录失败 --> " + remoteDownLoadPath);
 				return success;
 			}
@@ -122,8 +122,7 @@ public class FTPHelper {
 	 * @param remoteDirectoryPath
 	 *            Ftp 服务器路径 以目录"/"结束
 	 * */
-	public boolean uploadDirectory(String localDirectory,
-			String remoteDirectoryPath) {
+	public boolean uploadDirectory(String localDirectory, String remoteDirectoryPath) {
 		final File src = new File(localDirectory);
 		try {
 			remoteDirectoryPath = remoteDirectoryPath + src.getName() + "/";
@@ -142,8 +141,7 @@ public class FTPHelper {
 		for (int currentFile = 0; currentFile < allFile.length; currentFile++) {
 			if (allFile[currentFile].isDirectory()) {
 				// 递归
-				uploadDirectory(allFile[currentFile].getPath().toString(),
-						remoteDirectoryPath);
+				uploadDirectory(allFile[currentFile].getPath().toString(), remoteDirectoryPath);
 			}
 		}
 		return true;
@@ -155,8 +153,7 @@ public class FTPHelper {
 	 * @param remoteDirectory
 	 *            远程文件夹
 	 * */
-	public boolean downLoadDirectory(String localDirectoryPath,
-			String remoteDirectory) {
+	public boolean downLoadDirectory(String localDirectoryPath, String remoteDirectory) {
 		try {
 			String fileName = new File(remoteDirectory).getName();
 			localDirectoryPath = localDirectoryPath + fileName + "//";
@@ -164,16 +161,13 @@ public class FTPHelper {
 			FTPFile[] allFile = this.ftpClient.listFiles(remoteDirectory);
 			for (int currentFile = 0; currentFile < allFile.length; currentFile++) {
 				if (!allFile[currentFile].isDirectory()) {
-					downloadFile(allFile[currentFile].getName(),
-							localDirectoryPath, remoteDirectory);
+					downloadFile(allFile[currentFile].getName(), localDirectoryPath, remoteDirectory);
 				}
 			}
 			for (int currentFile = 0; currentFile < allFile.length; currentFile++) {
 				if (allFile[currentFile].isDirectory()) {
-					String strremoteDirectoryPath = remoteDirectory + "/"
-							+ allFile[currentFile].getName();
-					downLoadDirectory(localDirectoryPath,
-							strremoteDirectoryPath);
+					String strremoteDirectoryPath = remoteDirectory + "/" + allFile[currentFile].getName();
+					downLoadDirectory(localDirectoryPath, strremoteDirectoryPath);
 				}
 			}
 		} catch (IOException e) {
