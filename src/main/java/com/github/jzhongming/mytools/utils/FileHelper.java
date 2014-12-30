@@ -23,8 +23,7 @@ public class FileHelper {
 	 * @param content
 	 * @throws IOException
 	 */
-	public static void createFile(final String filePath, final String content)
-			throws IOException {
+	public static void createFile(final String filePath, final String content) throws IOException {
 		FileOutputStream fos = null;
 		try {
 			fos = new FileOutputStream(filePath);
@@ -82,8 +81,7 @@ public class FileHelper {
 	 * @return
 	 * @throws IOException
 	 */
-	public static List<File> getUniqueFiles(final String dirPath,
-			boolean recursive, final String... extension) throws IOException {
+	public static List<File> getUniqueFiles(final String dirPath, boolean recursive, final String... extension) throws IOException {
 		File dir = new File(dirPath);
 		if (!dir.exists()) {
 			throw new IOException("file not exist:" + dir);
@@ -95,8 +93,7 @@ public class FileHelper {
 		} else {
 			for (File f : dir.listFiles()) {
 				if (f.isDirectory() && recursive) {
-					fileSet.addAll(getUniqueFiles(f.getPath(), recursive,
-							extension));
+					fileSet.addAll(getUniqueFiles(f.getPath(), recursive, extension));
 				}
 				checkExtension(fileSet, f, extension);
 			}
@@ -106,8 +103,7 @@ public class FileHelper {
 		return fileList;
 	}
 
-	private static void checkExtension(Collection<File> collection,
-			final File file, final String... extension) {
+	private static void checkExtension(Collection<File> collection, final File file, final String... extension) {
 		for (String ext : extension) {
 			if (file.getPath().toLowerCase().endsWith(ext.toLowerCase())) {
 				collection.add(file);
@@ -122,12 +118,10 @@ public class FileHelper {
 	 * @return
 	 * @throws IOException
 	 */
-	public static List<String> getUniqueLibPath(boolean recursive,
-			String... dirs) throws IOException {
+	public static List<String> getUniqueLibPath(boolean recursive, String... dirs) throws IOException {
 		List<String> jarList = new ArrayList<String>();
 		for (String dir : dirs) {
-			List<File> fileList = FileHelper.getUniqueFiles(dir, recursive,
-					".jar");
+			List<File> fileList = FileHelper.getUniqueFiles(dir, recursive, ".jar");
 			if (fileList != null) {
 				for (File file : fileList) {
 					jarList.add(file.getCanonicalPath());
@@ -138,15 +132,13 @@ public class FileHelper {
 	}
 
 	public static boolean copyFile(final String srcPath, final String distPath) {
-		FileChannel fcin = null;
-		FileChannel fcout = null;
 		FileInputStream fin = null;
 		FileOutputStream fout = null;
 		try {
 			fin = new FileInputStream(srcPath);
 			fout = new FileOutputStream(distPath);
-			fcin = fin.getChannel();
-			fcout = fout.getChannel();
+			FileChannel fcin = fin.getChannel();
+			FileChannel fcout = fout.getChannel();
 			ByteBuffer buffer = ByteBuffer.allocate(2048);
 			for (;;) {
 				buffer.clear();
@@ -168,7 +160,7 @@ public class FileHelper {
 					e.printStackTrace();
 				}
 			}
-			if(null != fin) {
+			if (null != fin) {
 				try {
 					fin.close();
 				} catch (IOException e) {
@@ -185,8 +177,7 @@ public class FileHelper {
 	 * @param path
 	 * @throws IOException
 	 */
-	public static String getContentByLines(final String path)
-			throws IOException {
+	public static String getContentByLines(final String path) throws IOException {
 		File file = new File(path);
 		if (!file.exists()) {
 			throw new IOException("file not exist:" + path);
@@ -216,9 +207,6 @@ public class FileHelper {
 
 	public static void main(String[] args) throws IOException {
 
-		FileHelper
-				.copyFile(
-						"C:\\Users\\Administrator\\Desktop\\NioClient-master\\README.md",
-						"C:\\Users\\Administrator\\Desktop\\README.md");
+		FileHelper.copyFile("C:\\Users\\Administrator\\Desktop\\NioClient-master\\README.md", "C:\\Users\\Administrator\\Desktop\\README.md");
 	}
 }
