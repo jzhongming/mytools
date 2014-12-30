@@ -157,26 +157,34 @@ public class HashedWheelTimer implements Timer {
 		if (ticksPerWheel <= 0) {
 			throw new IllegalArgumentException("ticksPerWheel must be greater than 0: " + ticksPerWheel);
 		}
-		if (ticksPerWheel > 1073741824) {
+		if (ticksPerWheel > 0x3fffffff) {
 			throw new IllegalArgumentException("ticksPerWheel may not be greater than 2^30: " + ticksPerWheel);
 		}
 
 		ticksPerWheel = normalizeTicksPerWheel(ticksPerWheel);
-		@SuppressWarnings("unchecked") Set<HashedWheelTimeOut>[] wheel = new Set[ticksPerWheel];
-		for (int i = 0; i < wheel.length; i++) {
+		@SuppressWarnings("unchecked")
+		Set<HashedWheelTimeOut>[] wheel = new Set[ticksPerWheel];
+		for (int i = 0; i < wheel.length; i++) { // 并发考虑
 			wheel[i] = Collections.newSetFromMap(new ConcurrentHashMap<HashedWheelTimeOut, Boolean>());
 		}
 		return wheel;
 	}
-
+	
 	private static int normalizeTicksPerWheel(int ticksPerWheel) {
-		int normalizedTicksPerWheel = 1;
-		while (normalizedTicksPerWheel < ticksPerWheel) {
-			normalizedTicksPerWheel <<= 1;
+		if (((ticksPerWheel & (ticksPerWheel - 1)) == 0) && (ticksPerWheel != 0)) {
+			return ticksPerWheel;
 		}
-		return normalizedTicksPerWheel;
-	}
+		int value = 1;
+		// This uses the bit-twiddling hacks described on the Stanford site:
+		value |= value >> 1;
+		value |= value >> 2;
+		value |= value >> 4;
+		value |= value >> 8;
+		value |= value >> 16;
 
+		return value + 1;
+	}
+	
 	@Override
 	public TimeOut newTimeout(TimerTask task, long delay, TimeUnit unit) {
 		start();

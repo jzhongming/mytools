@@ -55,5 +55,6 @@ public class TailLogReader extends LineNumberReader {
 
 			}
 		}, 100, 1000, TimeUnit.MILLISECONDS);
+		tlr.close();
 	}
 }

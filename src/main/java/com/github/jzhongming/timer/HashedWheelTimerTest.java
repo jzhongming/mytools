@@ -84,7 +84,7 @@ public class HashedWheelTimerTest {
 		for (int i = 0; i < 5; i++) {
 			timerUnprocessed.newTimeout(new MyTask("测试Task ..."+i), 100*i, TimeUnit.MILLISECONDS);
 		}
-		timerUnprocessed.newTimeout(new MyTask("这个不能输出出来 ..."), 5, TimeUnit.SECONDS);
+		timerUnprocessed.newTimeout(new MyTask("这个不能输出出来 ..."), 1, TimeUnit.SECONDS);
 		Thread.sleep(1000L); // sleep for a second
 		assertEquals("Number of unprocessed TimeOuts should be 1", 1, timerUnprocessed.stop().size());
 	}

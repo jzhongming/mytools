@@ -225,10 +225,10 @@ public class Check {
 	private int _end = 0;
 
 	private final void initWindows() {
-		int total = 0;
-		for (int i = 0; i < findIdx.length; i++) {
-			total += findIdx[i];
-		}
+//		int total = 0;
+//		for (int i = 0; i < findIdx.length; i++) {
+//			total += findIdx[i];
+//		}
 		int flag = 0;
 		int idx = 0;
 		while (true) {

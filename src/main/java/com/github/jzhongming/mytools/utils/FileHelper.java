@@ -140,9 +140,11 @@ public class FileHelper {
 	public static boolean copyFile(final String srcPath, final String distPath) {
 		FileChannel fcin = null;
 		FileChannel fcout = null;
+		FileInputStream fin = null;
+		FileOutputStream fout = null;
 		try {
-			FileInputStream fin = new FileInputStream(srcPath);
-			FileOutputStream fout = new FileOutputStream(distPath);
+			fin = new FileInputStream(srcPath);
+			fout = new FileOutputStream(distPath);
 			fcin = fin.getChannel();
 			fcout = fout.getChannel();
 			ByteBuffer buffer = ByteBuffer.allocate(2048);
@@ -159,16 +161,16 @@ public class FileHelper {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			if(null != fcout) {
+			if(null != fout) {
 				try {
-					fcout.close();
+					fout.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
-			if(null != fcin) {
+			if(null != fin) {
 				try {
-					fcin.close();
+					fin.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -213,12 +215,6 @@ public class FileHelper {
 	}
 
 	public static void main(String[] args) throws IOException {
-		// List<String> f = FileHelper.getUniqueLibPath(true,
-		// "C:\\Users\\Administrator\\.m2\\repository",
-		// "C:\\Users\\Administrator\\.m2\\repository\\com\\bj58");
-		// for (String s : f) {
-		// System.out.println(s);
-		// }
 
 		FileHelper
 				.copyFile(

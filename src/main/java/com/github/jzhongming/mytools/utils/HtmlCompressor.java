@@ -307,5 +307,6 @@ public class HtmlCompressor {
 		}
 
 		System.out.println(HtmlCompressor.compress(sbf.toString()));
+		reader.close();
 	}
 }
