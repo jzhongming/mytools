@@ -9,4 +9,8 @@ public abstract class SupperClassFilter extends DefaultClassFilter {
 		this.superClass = superClass;
 	}
 
+	public SupperClassFilter(String packageName, Class<?> superClass, ClassLoader loader) {
+		super(packageName, loader);
+		this.superClass = superClass;
+	}
 }

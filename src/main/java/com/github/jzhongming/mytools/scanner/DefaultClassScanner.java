@@ -39,6 +39,40 @@ public class DefaultClassScanner implements ClassScanner {
 		}.getClassList();
 	}
 	
+	@Override
+	public Set<Class<?>> getClassList(String packageName, ClassLoader classLoader) {
+		return new DefaultClassFilter(packageName, classLoader) {
+			@Override
+			public boolean filterCondition(Class<?> cls) {
+				String className = cls.getName();
+				String pkgName = className.substring(0, className.lastIndexOf("."));
+				return pkgName.startsWith(packageName);
+
+			}
+		}.getClassList();
+	}
+
+	@Override
+	public Set<Class<?>> getClassListByAnnotation(String packageName, Class<? extends Annotation> annotationClass, ClassLoader classLoader) {
+		return new AnnotationClassFilter(packageName, annotationClass, classLoader) {
+			@Override
+			public boolean filterCondition(Class<?> cls) { // 这里去掉了内部类
+				return cls.isAnnotationPresent(annotationClass);
+			}
+		}.getClassList();
+	}
+
+	@Override
+	public Set<Class<?>> getClassListBySuper(String packageName, Class<?> superClass, ClassLoader classLoader) {
+		return new SupperClassFilter(packageName, superClass, classLoader) {
+			@Override
+			public boolean filterCondition(Class<?> cls) { // 这里去掉了内部类
+				return superClass.isAssignableFrom(cls) && !superClass.equals(cls);// && !cls.getName().contains("$");
+			}
+
+		}.getClassList();
+	}
+	
 	public static void main(String[] args) throws Exception {
 		ClassScanner cs = new DefaultClassScanner();
 		Set<Class<?>> s  = cs.getClassList("com.github");

@@ -29,7 +29,9 @@ public abstract class DefaultClassFilter {
 		this.packageName = packageName;
 		DefaultClassFilter.DefaultClassLoader = classLoader;
 	}
+	
 	public final Set<Class<?>> getClassList() {
+		// 收集符合条件的Class类容器
 		Set<Class<?>> clazzes = new HashSet<Class<?>>();
 		try {
 			// 从包名获取 URL 类型的资源

@@ -10,4 +10,9 @@ public abstract class AnnotationClassFilter extends DefaultClassFilter {
 		super(packageName);
 		this.annotationClass = annotationClass;
 	}
+	
+	public AnnotationClassFilter(String packageName, Class<? extends Annotation> annotationClass, ClassLoader loader) {
+		super(packageName, loader);
+		this.annotationClass = annotationClass;
+	}
 }
