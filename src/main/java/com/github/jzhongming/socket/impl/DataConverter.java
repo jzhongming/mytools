@@ -1,4 +1,4 @@
-﻿package com.github.jzhongming.socket.impl;
+package com.github.jzhongming.socket.impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
@@ -19,13 +19,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
-/**
- * a data converter utilities class
- * 
- * @author grro@xsocket.org
- */
 public final class DataConverter {
-
 	private static final Map<String, CharsetEncoder> encoders = new HashMap<String, CharsetEncoder>();
 	private static final Map<String, CharsetDecoder> decoders = new HashMap<String, CharsetDecoder>();
 

@@ -34,8 +34,7 @@ public class CookieUtil {
 	 * @param value
 	 * @param cookieTime
 	 */
-	public static void setCookie(HttpServletResponse response,
-			String cookieName, String value, int cookieTime) {
+	public static void setCookie(HttpServletResponse response, String cookieName, String value, int cookieTime) {
 		Cookie cookies = new Cookie(cookieName, value);
 		cookies.setPath("/");
 		cookies.setMaxAge(cookieTime);
@@ -53,9 +52,7 @@ public class CookieUtil {
 	 * @param cookieTime
 	 * @return
 	 */
-	public static boolean addCookie(HttpServletRequest request,
-			HttpServletResponse response, String cookieName, String value,
-			int cookieTime) {
+	public static boolean addCookie(HttpServletRequest request, HttpServletResponse response, String cookieName, String value, int cookieTime) {
 		if (null == getCookie(request, cookieName)) {
 			Cookie cookies = new Cookie(cookieName, value);
 			cookies.setPath("/");
@@ -74,8 +71,7 @@ public class CookieUtil {
 	 * @param cookieName
 	 * @param value
 	 */
-	public static void setCookie(HttpServletResponse response,
-			String cookieName, String value) {
+	public static void setCookie(HttpServletResponse response, String cookieName, String value) {
 		Cookie cookies = new Cookie(cookieName, value);
 		cookies.setPath("/");
 		cookies.setMaxAge(COOKIE_AGE_DEFAULT);
@@ -92,8 +88,7 @@ public class CookieUtil {
 	 * @param value
 	 * @return
 	 */
-	public static boolean addCookie(HttpServletRequest request,
-			HttpServletResponse response, String cookieName, String value) {
+	public static boolean addCookie(HttpServletRequest request, HttpServletResponse response, String cookieName, String value) {
 		if (null == getCookie(request, cookieName)) {
 			Cookie cookies = new Cookie(cookieName, value);
 			cookies.setPath("/");
@@ -113,8 +108,7 @@ public class CookieUtil {
 	 * @param cookieName
 	 * @return
 	 */
-	public static boolean removeCookie(HttpServletRequest request,
-			HttpServletResponse response, String cookieName) {
+	public static boolean removeCookie(HttpServletRequest request, HttpServletResponse response, String cookieName) {
 		if (StringUtil.isNotEmpty(cookieName)) {
 			Cookie cookie = getCookie(request, cookieName);
 			if (cookie != null) {
@@ -135,8 +129,7 @@ public class CookieUtil {
 	 * @param cookieName
 	 * @return
 	 */
-	public static Cookie getCookie(HttpServletRequest request,
-			final String cookieName) {
+	public static Cookie getCookie(HttpServletRequest request, final String cookieName) {
 		Cookie[] cookies = request.getCookies();
 		if (cookies != null && cookies.length > 0) {
 			for (Cookie c : cookies) {
@@ -155,8 +148,7 @@ public class CookieUtil {
 	 * @param response
 	 * @return
 	 */
-	public static boolean checkUID(HttpServletRequest request,
-			HttpServletResponse response) {
+	public static boolean checkUID(HttpServletRequest request, HttpServletResponse response) {
 		Cookie[] cookies = request.getCookies();
 		if (cookies != null) {
 			for (Cookie cookie : cookies) {

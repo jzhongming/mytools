@@ -12,7 +12,6 @@ import sun.misc.Launcher;
 
 import com.github.jzhongming.mytools.utils.FileHelper;
 
-@SuppressWarnings("restriction")
 public class GlobalClassLoader {
 
 	private static Method addURL;
