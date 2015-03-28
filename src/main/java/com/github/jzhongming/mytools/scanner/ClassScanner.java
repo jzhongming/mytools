@@ -20,7 +20,7 @@ public interface ClassScanner {
 	/**
 	 * 获取指定包名中的所有类
 	 */
-	Set<Class<?>> getClassList(String packageName);
+	Set<Class<?>> getClassList(String packageName, String packagePattern);
 
 	/**
 	 * 获取指定包名中指定注解的相关类
@@ -35,7 +35,7 @@ public interface ClassScanner {
 	/**
 	 * 自定义ClassLoader中获取指定包名中的所有类
 	 */
-	Set<Class<?>> getClassList(String packageName, ClassLoader classLoader);
+	Set<Class<?>> getClassList(String packageName, String packagePattern, ClassLoader classLoader);
 
 	/**
 	 * 自定义ClassLoader中获取指定包名中指定注解的相关类
