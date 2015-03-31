@@ -5,6 +5,15 @@ import java.lang.reflect.Modifier;
 import java.util.Set;
 
 public class DefaultClassScanner implements ClassScanner {
+	private static final DefaultClassScanner Instance = new DefaultClassScanner();
+
+	private DefaultClassScanner() {
+
+	}
+
+	public static DefaultClassScanner getInstance() {
+		return Instance;
+	}
 
 	@Override
 	public Set<Class<?>> getClassList(final String packageName, final String pattern) {

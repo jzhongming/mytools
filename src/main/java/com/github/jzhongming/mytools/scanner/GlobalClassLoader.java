@@ -5,13 +5,14 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.List;
 
+import com.github.jzhongming.mytools.utils.FileHelper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import sun.misc.Launcher;
 
-import com.github.jzhongming.mytools.utils.FileHelper;
-
+@SuppressWarnings("restriction")
 public class GlobalClassLoader {
 
 	private static Method addURL;

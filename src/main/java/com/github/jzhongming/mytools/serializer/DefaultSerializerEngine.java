@@ -3,13 +3,12 @@ package com.github.jzhongming.mytools.serializer;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.github.jzhongming.mytools.scanner.DefaultClassScanner;
+import com.github.jzhongming.mytools.serializer.annotation.CCSerializable;
+
 import org.apache.commons.lang.IllegalClassException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.github.jzhongming.mytools.scanner.ClassScanner;
-import com.github.jzhongming.mytools.scanner.DefaultClassScanner;
-import com.github.jzhongming.mytools.serializer.annotation.CCSerializable;
 
 public final class DefaultSerializerEngine implements ISerializerEngine {
 	private static final Logger logger = LoggerFactory.getLogger(DefaultSerializerEngine.class);
@@ -23,8 +22,7 @@ public final class DefaultSerializerEngine implements ISerializerEngine {
 	}
 
 	private void lodingLocalePackage() {
-		ClassScanner csc = new DefaultClassScanner();
-		final Set<Class<?>> classes = csc.getClassListByAnnotation("com.github.jzhongming", CCSerializable.class);
+		final Set<Class<?>> classes = DefaultClassScanner.getInstance().getClassListByAnnotation("com.github.jzhongming", CCSerializable.class);
 		for (Class<?> c : classes) {
 			logger.info("scaning {}", c.getName());
 			try {
