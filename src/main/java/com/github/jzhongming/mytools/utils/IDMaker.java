@@ -21,7 +21,7 @@ public final class IDMaker {
 	private final static long sequenceBits = 10L;
 
 	private final long makerId;
-	private final static long idepoch = 1390000000000L;
+	private final static long idepoch = 1400923280000L;
 	private final static long timestampLeftShift = workerIdBits + sequenceBits;
 
 	public final static long maxMakerId = ~(-1L << workerIdBits);
