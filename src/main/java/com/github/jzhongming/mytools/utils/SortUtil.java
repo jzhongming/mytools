@@ -250,8 +250,8 @@ public class SortUtil {
 	}
 	public static void main(String[] args) {
 		int[] array = {1,3,5,7, 2,4,6,8,9};
-		insertSort(array);
-//		quickSort_1(array);
+//		insertSort(array);
+		quickSort_2(array, 0, array.length-1);
 		for(int a : array) {
 			System.out.println(a);
 		}

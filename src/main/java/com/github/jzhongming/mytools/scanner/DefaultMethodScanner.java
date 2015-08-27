@@ -62,9 +62,4 @@ public class DefaultMethodScanner implements MethodScanner {
 			}
 		}.getMethodList();
 	}
-
-	public static void main(String[] args) {
-		DefaultMethodScanner dm = new DefaultMethodScanner();
-		System.out.println(dm.getMethodList(DefaultMethodScanner.class, "^getM.*"));
-	}
 }

@@ -22,7 +22,6 @@ public class DefaultClassScanner implements ClassScanner {
 			public boolean filterCondition(Class<?> cls) {
 				String className = cls.getName();
 				String patternStr = (null == pattern || pattern.isEmpty()) ? ".*" : pattern;
-				System.out.println(">>> : " + className + " >>> " + patternStr + " .." + className.matches(patternStr));
 				return className.startsWith(packageName) && className.matches(patternStr);
 
 			}
@@ -85,13 +84,5 @@ public class DefaultClassScanner implements ClassScanner {
 			}
 
 		}.getClassList();
-	}
-
-	public static void main(String[] args) throws Exception {
-		ClassScanner cs = new DefaultClassScanner();
-		Set<Class<?>> s = cs.getClassList("com.github", null);
-		for (Class<?> c : s) {
-			System.out.println(c.getName());
-		}
 	}
 }
