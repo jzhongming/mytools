@@ -12,7 +12,6 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,7 +92,7 @@ public abstract class DefaultClassFilter {
 				if (file.isFile()) {
 					// 获取类名
 					String className = fileName.substring(0, fileName.lastIndexOf("."));
-					if (StringUtils.isNotEmpty(packageName)) {
+					if (null != packageName && !packageName.isEmpty()) {
 						className = packageName + "." + className;
 					}
 					// 执行添加类操作
@@ -101,12 +100,12 @@ public abstract class DefaultClassFilter {
 				} else {
 					// 获取子包
 					String subPackagePath = fileName;
-					if (StringUtils.isNotEmpty(packagePath)) {
+					if (null != packagePath && !packagePath.isEmpty()) {
 						subPackagePath = packagePath + "/" + subPackagePath;
 					}
 					// 子包名
 					String subPackageName = fileName;
-					if (StringUtils.isNotEmpty(packageName)) {
+					if (null != packageName && !packageName.isEmpty()) {
 						subPackageName = packageName + "." + subPackageName;
 					}
 					// 递归调用
