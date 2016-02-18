@@ -58,6 +58,10 @@ public class StringUtil {
 
 		return true;
 	}
+	
+	public static boolean isNotBlank(final String str) {
+		return !isBlank(str);
+	}
 
 	/**
 	 * 判断是否含有中文字符（包括中文符号）
