@@ -45,28 +45,10 @@ public class Jwt {
 		if (args.length != 3) {
 			throw new Exception("error token");
 		}
-
-		Header h = new ObjectMapper().readValue(Base64.decodeFast(args[0]), Header.class);
-		Payload p = new ObjectMapper().readValue(Base64.decodeFast(args[1]), Payload.class);
+		ObjectMapper mapper = new ObjectMapper();
+		Header h = mapper.readValue(Base64.decodeFast(args[0]), Header.class);
+		Payload p = mapper.readValue(Base64.decodeFast(args[1]), Payload.class);
 		return new TokenInfo(h, p);
-	}
-
-	public static void main(String[] args) throws Exception {
-		Header header = new Header("JTW", "HmacSHA256");
-		Payload payload = new Payload();
-		payload.setAud("Jerry");
-		payload.setSub("CBS");
-		payload.setIss("CBS");
-		payload.setExp(System.currentTimeMillis());
-		payload.setIat(System.currentTimeMillis());
-		payload.setNbf(System.currentTimeMillis());
-		payload.setExt("TEST");
-
-		TokenInfo tinfo = new TokenInfo(header, payload);
-		String token = Jwt.getToken("jerry", tinfo);
-		System.out.println(token);
-		System.out.println(parseTokenInfo(token));
-		System.out.println(checkToken("jerry", token));
 	}
 
 	public static class TokenInfo {
@@ -90,7 +72,24 @@ public class Jwt {
 		public String toString() {
 			return "TokenInfo [header=" + header + ", payload=" + payload + "]";
 		}
+	}
 
+	public static void main(String[] args) throws Exception {
+		Header header = new Header("JTW", "HmacSHA256");
+		Payload payload = new Payload();
+		payload.setAud("Jerry");
+		payload.setSub("CBS");
+		payload.setIss("CBS");
+		payload.setExp(System.currentTimeMillis());
+		payload.setIat(System.currentTimeMillis());
+		payload.setNbf(System.currentTimeMillis());
+		payload.setExt("TEST");
+
+		TokenInfo tinfo = new TokenInfo(header, payload);
+		String token = Jwt.getToken("jerry", tinfo);
+		System.out.println(token);
+		System.out.println(parseTokenInfo(token));
+		System.out.println(checkToken("jerry", token));
 	}
 
 }
