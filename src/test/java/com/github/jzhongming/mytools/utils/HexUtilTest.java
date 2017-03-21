@@ -12,6 +12,7 @@ public class HexUtilTest {
 		}
 		byte[] b = HexUtil.decodeHex(c);
 		System.out.println(new String(b));
+		
 	}
 }
 //6d6f6e73746572e4b8ade58d8ee4babae6b091e585b1e5928ce59bbd

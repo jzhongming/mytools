@@ -1,5 +1,6 @@
 package com.github.jzhongming.mytools.utils;
 
+import java.util.Calendar;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -18,7 +19,7 @@ import java.util.concurrent.CountDownLatch;
  * @since 1.0
  */
 public class IDWorker {
-	private final static long idepoch = 1288834974657L;
+	private final static long idepoch = 1454256000975L;
 
 	private final static long datacenterIdBits = 5L;
 	private final static long workerIdBits = 5L;
@@ -94,22 +95,26 @@ public class IDWorker {
 	}
 
 	public static void main(String[] args) throws InterruptedException {
-		System.out.println(~(-1 << 10));
-		final IDWorker idm = new IDWorker(4, 0);
-		final CountDownLatch cdl = new CountDownLatch(4);
-		long start = System.currentTimeMillis();
-		for (int i = 0; i < 4; i++) {
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					for (int i = 0; i < 1000000; i++)
-						idm.getId();
-
-					cdl.countDown();
-				}
-			}, "work_" + i).start();
-		}
-		cdl.await();
-		System.out.println(System.currentTimeMillis() - start);
+//		System.out.println(~(-1 << 10));
+//		final IDWorker idm = new IDWorker(4, 0);
+//		
+		System.out.println(maxDatacenterId);
+		
+		
+//		final CountDownLatch cdl = new CountDownLatch(4);
+//		long start = System.currentTimeMillis();
+//		for (int i = 0; i < 4; i++) {
+//			new Thread(new Runnable() {
+//				@Override
+//				public void run() {
+//					for (int i = 0; i < 1000000; i++)
+//						idm.getId();
+//
+//					cdl.countDown();
+//				}
+//			}, "work_" + i).start();
+//		}
+//		cdl.await();
+//		System.out.println(System.currentTimeMillis() - start);
 	}
 }

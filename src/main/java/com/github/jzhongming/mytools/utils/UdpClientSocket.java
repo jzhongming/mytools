@@ -98,7 +98,7 @@ public class UdpClientSocket {
 	public static void main(String[] args) throws Exception {
 		UdpClientSocket ucs = new UdpClientSocket();
 		long s = System.currentTimeMillis();
-		for (int i = 0; i < 10000000; i++) {
+		for (int i = 0; i < 2000000; i++) {
 			ucs.send("localhost", 1200, ("Hello,World! > "+i).getBytes());
 		}
 		System.out.println(System.currentTimeMillis() - s);
